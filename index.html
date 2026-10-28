@@ -1,0 +1,1930 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Science Club Titration Protocol</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400..700&display=swap">
+<style>
+/* Layout concept: a bench sheet. A sticky 40-minute track (segments drawn to scale, 8:10:15:7) sits over one column of numbered stations. Each station is a short brief, an animated technique, then the calculations the team does itself.
+   Colour carries chemistry: red = acid, blue = base, violet = in between. "Not yet" feedback is amber so red keeps its chemical meaning. */
+:root{
+  --bg:#EDF0F5; --surface:#FFFFFF; --surface-2:#F3F5F9; --ink:#13203A; --ink-2:#414E68; --ink-3:#5A667F;
+  --line:#CDD5E3; --line-2:#E2E7F0;
+  --acid:#C23A30; --acid-soft:#FBE9E6; --acid-ink:#8A2119;
+  --base:#2552C0; --base-soft:#E5ECFB; --base-ink:#163A8B;
+  --mid:#6E4AA0; --mid-soft:#EFE8F7;
+  --ok:#17794B; --ok-soft:#DDF3E6; --warn:#8F5400; --warn-soft:#FCEFD3;
+  --glass:#8DA0BF; --liq-vin:#E3A93A; --liq-soda:#8FB6EE; --liq-water:#A9D8E0; --powder:#F8F9FB;
+  --paper-red:#D63A34; --paper-blue:#3158C9;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1322; --surface:#141D32; --surface-2:#1A2540; --ink:#E8EDF8; --ink-2:#B4BFD6; --ink-3:#8E9AB4;
+    --line:#2C3A5C; --line-2:#222E4A;
+    --acid:#FF8277; --acid-soft:#3A1F27; --acid-ink:#FFB5AD;
+    --base:#84A9FF; --base-soft:#1B2A55; --base-ink:#BCD0FF;
+    --mid:#C3A0F2; --mid-soft:#2A2145;
+    --ok:#53D493; --ok-soft:#13362A; --warn:#F3B24F; --warn-soft:#3A2D12;
+    --glass:#5E7194; --liq-vin:#D9A03A; --liq-soda:#6F98D8; --liq-water:#5FA6B3; --powder:#E6EBF5;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1322; --surface:#141D32; --surface-2:#1A2540; --ink:#E8EDF8; --ink-2:#B4BFD6; --ink-3:#8E9AB4;
+  --line:#2C3A5C; --line-2:#222E4A;
+  --acid:#FF8277; --acid-soft:#3A1F27; --acid-ink:#FFB5AD;
+  --base:#84A9FF; --base-soft:#1B2A55; --base-ink:#BCD0FF;
+  --mid:#C3A0F2; --mid-soft:#2A2145;
+  --ok:#53D493; --ok-soft:#13362A; --warn:#F3B24F; --warn-soft:#3A2D12;
+  --glass:#5E7194; --liq-vin:#D9A03A; --liq-soda:#6F98D8; --liq-water:#5FA6B3; --powder:#E6EBF5;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:60}
+h1,h2,h3,h4,p,ol,ul,figure{margin:0}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance}
+sub{font-size:.72em;line-height:0}
+b{font-weight:650}
+a{color:var(--base)}
+:focus-visible{outline:3px solid var(--base);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.skip{position:absolute;left:-999px;top:0;background:var(--ink);color:var(--surface);padding:8px 12px;z-index:70}
+.skip:focus{left:8px;top:8px}
+
+/* ---------- buttons, chips, fields ---------- */
+.btn{font:600 14px/1.1 var(--f-body);padding:10px 14px;border-radius:8px;border:1.5px solid var(--ink-3);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;gap:6px;align-items:center;justify-content:center}
+.btn:hover:not(:disabled){border-color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.btn.ghost{border-color:var(--line)}
+.btn.small{padding:7px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chip{display:inline-flex;gap:6px;align-items:center;padding:3px 10px;border-radius:99px;font:500 12.5px/1.3 var(--f-mono);background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2)}
+.chip.acid{background:var(--acid-soft);color:var(--acid-ink);border-color:transparent}
+.chip.base{background:var(--base-soft);color:var(--base-ink);border-color:transparent}
+.chip.mid{background:var(--mid-soft);color:var(--mid);border-color:transparent}
+.chip.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+select,.txt{font:500 14.5px var(--f-body);color:var(--ink);background:var(--surface);border:1.5px solid var(--ink-3);border-radius:8px;padding:8px 9px;max-width:100%}
+.txt{width:100%}
+textarea.txt{font:400 15px/1.5 var(--f-body);min-height:92px;resize:vertical}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-in{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;padding-block:8px}
+.brand{font:800 15px/1 var(--f-display);font-stretch:120%;letter-spacing:.03em;white-space:nowrap;text-transform:uppercase}
+.trackwrap{position:relative;padding-bottom:6px}
+.track{display:flex;gap:4px}
+.seg{flex:var(--w) 1 0;min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:7px;padding:5px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink-2);text-decoration:none;font-size:12px;line-height:1.2;overflow:hidden}
+.seg b{grid-row:1/3;align-self:center;font:600 16px/1 var(--f-mono)}
+.seg span{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg i{font:500 11px/1.2 var(--f-mono);font-style:normal;color:var(--ink-3)}
+.seg.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.seg.on i{color:inherit;opacity:.8}
+.seg.now{box-shadow:inset 0 -3px 0 var(--base)}
+.prog{position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--line-2);border-radius:4px;overflow:hidden}
+.prog>div{height:100%;width:0;background:var(--base)}
+.clock{display:flex;align-items:center;gap:6px}
+.clock output{font:600 18px/1 var(--f-mono);min-width:5ch;text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:720px){
+  .bar-in{grid-template-columns:minmax(0,1fr) auto;gap:10px}
+  .brand{display:none}
+  .seg{grid-template-columns:minmax(0,1fr);padding:6px 3px;text-align:center}
+  .seg span,.seg i{display:none}
+  .seg b{grid-row:auto}
+  .clock{gap:4px}
+  .clock output{font-size:16px;min-width:5ch}
+  .clock .btn{padding:7px 8px}
+}
+
+/* ---------- hero ---------- */
+.hero-in{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:32px;align-items:center;padding-block:44px 18px}
+.eyebrow{font:500 13px/1.3 var(--f-mono);text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);margin-bottom:14px}
+.hero h1{font:800 clamp(34px,6.4vw,66px)/1.02 var(--f-display);font-stretch:122%;letter-spacing:-.01em}
+.t-acid{color:var(--acid)} .t-base{color:var(--base)}
+.lede{margin-top:18px;max-width:58ch;font-size:18px;color:var(--ink-2)}
+.team{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.team label{font:600 13px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.team .txt{width:min(100%,280px)}
+.hero-art{width:100%;max-width:300px;justify-self:center;height:auto}
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding-block:14px 0;list-style:none}
+.how li{padding:14px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:14.5px;color:var(--ink-2)}
+.how b{display:block;font:700 15px var(--f-display);font-stretch:108%;color:var(--ink);margin-bottom:2px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-block:14px 0}
+.h-drop,.h-spot{transform-box:fill-box;transform-origin:center}
+.h-drop{animation:hdrop 7s infinite}
+.h-drop.d2{animation-delay:.5s}
+.h-spot{stroke:rgba(0,0,0,.22);stroke-width:1.5}
+.h-spot.a{animation:hspotA 7s infinite}
+.h-spot.b{animation:hspotB 7s infinite;animation-delay:.5s}
+@keyframes hdrop{0%{transform:translateY(-70px);opacity:0}6%{opacity:1}22%{transform:translateY(0);opacity:1}25%,100%{transform:translateY(0);opacity:0}}
+@keyframes hspotA{0%,22%{transform:scale(0);fill:var(--paper-red)}30%{transform:scale(1);fill:var(--paper-red)}52%,88%{transform:scale(1);fill:var(--paper-blue)}100%{transform:scale(0);fill:var(--paper-blue)}}
+@keyframes hspotB{0%,22%{transform:scale(0);fill:var(--paper-blue)}30%{transform:scale(1);fill:var(--paper-blue)}52%,88%{transform:scale(1);fill:var(--paper-red)}100%{transform:scale(0);fill:var(--paper-red)}}
+@media (max-width:820px){.hero-in{grid-template-columns:minmax(0,1fr)}.hero-art{max-width:220px;justify-self:start}.how{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- safety & kit ---------- */
+.sect{padding-block:40px 0}
+.sect h2,.sect-h{font:800 clamp(22px,3.4vw,30px)/1.1 var(--f-display);font-stretch:112%;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.sect .lead{margin-top:6px;color:var(--ink-2);max-width:68ch}
+.safe-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
+.safe{display:grid;grid-template-columns:auto 34px minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
+.safe:has(input:checked){border-color:var(--ok);background:var(--ok-soft)}
+.safe input,.kit input{width:20px;height:20px;accent-color:var(--ok)}
+.safe svg{width:34px;height:34px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.safe span{font-size:15px}
+@media (max-width:720px){.safe-grid{grid-template-columns:minmax(0,1fr)}}
+.kit-wrap{margin-top:16px;overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.kit{border-collapse:collapse;width:100%;font-size:15px}
+.kit th,.kit td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line-2)}
+.kit tr:last-child td,.kit tr:last-child th{border-bottom:0}
+.kit thead th{font:600 12px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.kit td.amt{font-family:var(--f-mono);white-space:nowrap}
+details.bonus{margin-top:14px;border:1px dashed var(--ink-3);border-radius:10px;padding:12px 14px;background:var(--surface)}
+details.bonus summary{cursor:pointer;font-weight:650}
+details.bonus[open] summary{margin-bottom:12px}
+.bonus .calc{border:0;padding:0}
+.n-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+
+/* ---------- stations ---------- */
+.station{padding-block:52px 0;scroll-margin-top:86px}
+.st-head{display:flex;align-items:flex-end;gap:18px;padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.st-num{font:800 clamp(56px,10vw,96px)/.8 var(--f-display);font-stretch:125%}
+.st-time{font:500 13px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:8px}
+.st-head h2{font:800 clamp(26px,4.4vw,40px)/1.05 var(--f-display);font-stretch:112%}
+.st-goal{margin-top:14px;max-width:70ch;color:var(--ink-2);font-size:17px}
+.datacard{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.dc-t{font:600 12px var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-right:4px}
+.dc-u{font:500 12px var(--f-mono);color:var(--ink-3)}
+.block{margin-top:36px;display:grid;gap:16px}
+.sub{font:700 21px/1.2 var(--f-display);font-stretch:108%;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{font:600 12px/1 var(--f-mono);background:var(--ink);color:var(--surface);padding:5px 7px;border-radius:4px;letter-spacing:.04em}
+.sub-note{color:var(--ink-2);max-width:72ch}
+.bench{padding-left:22px;display:grid;gap:4px;color:var(--ink-2);max-width:72ch}
+.bench li::marker{font:600 13px var(--f-mono);color:var(--ink)}
+.callout{padding:12px 14px;border-radius:10px;background:var(--mid-soft);color:var(--ink);max-width:76ch;font-size:15px}
+.callout b{color:var(--mid)}
+.callout.safety-c{background:var(--warn-soft)}
+.callout.safety-c b{color:var(--warn)}
+
+/* ---------- steppers & stages ---------- */
+.stepper{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:22px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.steps{list-style:none;padding:0;display:grid;gap:6px}
+.step button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;align-items:start;padding:10px 12px;border-radius:10px;border:1.5px solid transparent;cursor:pointer}
+.step button:hover{background:var(--surface-2)}
+.step button:focus-visible{outline:3px solid var(--base);outline-offset:2px}
+.step.on button{background:var(--surface-2);border-color:var(--ink)}
+.step-n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 14px var(--f-mono);border:2px solid var(--line);color:var(--ink-2)}
+.step.on .step-n{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.step-t b{display:block;font-weight:650;line-height:1.35}
+.step-t small{display:block;margin-top:3px;font-size:14px;line-height:1.45;color:var(--ink-2)}
+.stage-col{display:grid;gap:10px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 92px)}
+.stage{background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
+.stage svg{display:block;width:100%;height:auto}
+.cap{font:500 13.5px/1.45 var(--f-mono);color:var(--ink-2);min-height:2.9em}
+.st-ctl{display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:820px){.stepper{grid-template-columns:minmax(0,1fr)}.stage-col{position:static;order:-1}}
+.split{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:22px;align-items:start}
+.split>.stage-col{position:sticky}
+@media (max-width:900px){.split{grid-template-columns:minmax(0,1fr)}.split>.stage-col{position:static}}
+
+/* svg parts */
+.s-glass{fill:none;stroke:var(--glass);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+.s-tick{stroke:var(--glass);stroke-width:1.5}
+.s-lbl{font:500 13px var(--f-mono);fill:var(--ink-3)}
+.s-lbl.b{font-weight:600;fill:var(--ink)}
+.s-water{fill:var(--liq-water)} .s-vin{fill:var(--liq-vin)} .s-soda{fill:var(--liq-soda)}
+.s-dot-b{fill:var(--base);stroke:var(--surface);stroke-width:.8}
+.s-dot-r{fill:var(--acid);stroke:var(--surface);stroke-width:.8}
+.s-dot-m{fill:var(--mid);stroke:var(--surface);stroke-width:.8}
+.dot{animation:jig var(--d,1.6s) ease-in-out infinite alternate}
+@keyframes jig{to{transform:translate(calc(var(--bx,2px)*var(--k,1)),calc(var(--by,2px)*var(--k,1)))}}
+svg.stir{--k:4}
+.s-body{fill:var(--surface);stroke:var(--line);stroke-width:2}
+.s-screen{fill:var(--ink)}
+.s-read{font:600 15px var(--f-mono);fill:var(--surface)}
+.s-pan{fill:var(--glass)}
+.s-tare{fill:var(--line)}
+.s-boat{fill:var(--surface);stroke:var(--ink-3);stroke-width:2;stroke-linejoin:round}
+.s-powder{fill:var(--powder);stroke:var(--ink-3);stroke-width:1.5;transform-box:fill-box;transform-origin:50% 100%}
+.s-grain{fill:var(--powder);stroke:var(--ink-3);stroke-width:1}
+.s-mark{stroke:var(--base);stroke-width:2.5;stroke-dasharray:7 5}
+.s-rod{stroke:var(--ink-3);stroke-width:4;stroke-linecap:round}
+.s-tag{fill:var(--surface);stroke:var(--ink);stroke-width:2}
+.s-tag-a{font:800 28px var(--f-display);fill:var(--ink);text-anchor:middle}
+.s-tag-t{font:600 12px var(--f-mono);fill:var(--ink);text-anchor:middle}
+.s-nozzle{fill:var(--surface)}
+.s-vinline{fill:none;stroke:var(--liq-vin);stroke-width:4;stroke-linecap:round}
+.s-badge{fill:var(--surface);stroke:var(--ink);stroke-width:2}
+.s-badge-t{font:700 22px var(--f-mono);fill:var(--ink);text-anchor:middle}
+.s-strip-r{fill:var(--paper-red)} .s-strip-b{fill:var(--paper-blue)}
+.s-bub{fill:none;stroke:var(--powder);stroke-width:1.4;opacity:0;animation:rise 1.2s ease-in forwards}
+@keyframes rise{0%{transform:translate(0,0);opacity:0}15%{opacity:.95}85%{opacity:.9}100%{transform:translate(var(--bx,0),var(--by,-80px));opacity:0}}
+.s-foam{fill:var(--powder);opacity:.9;animation:foam 1.8s ease-out forwards}
+@keyframes foam{from{opacity:.9}to{opacity:0}}
+.s-fizzbar{fill:var(--mid)}
+.s-ruler{stroke:var(--ink-3);stroke-width:1.5}
+.s-fill{fill:var(--base);opacity:.9}
+.s-pred{fill:var(--ok)}
+.s-co2{fill:none;stroke:var(--ink-3);stroke-width:1.6}
+
+/* ---------- questions ---------- */
+.calc{display:grid;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.calc h4{font:700 16px var(--f-display);font-stretch:108%;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline}
+.calc-n{font:400 13px var(--f-body);color:var(--ink-3)}
+.q{border:1.5px solid var(--line-2);border-radius:10px;padding:14px;display:grid;gap:10px;background:var(--surface)}
+.q.solved{border-color:var(--ok);background:var(--ok-soft)}
+.q.locked{opacity:.5}
+.q-top{display:flex;gap:12px;align-items:flex-start}
+.q-tag{font:600 12px/1 var(--f-mono);border:1.5px solid var(--ink);padding:5px 6px;border-radius:4px;flex:none}
+.q.solved .q-tag{background:var(--ok);border-color:var(--ok);color:#fff}
+.q-prompt{min-width:0}
+.q-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.q-field{display:inline-flex;align-items:stretch;border:1.5px solid var(--ink-3);border-radius:8px;background:var(--surface);overflow:hidden}
+.q-field:focus-within{outline:3px solid var(--base);outline-offset:1px}
+.q-field input{border:0;outline:0;background:transparent;color:var(--ink);font:500 18px var(--f-mono);padding:9px 10px;width:10ch;min-width:0}
+.unit{font:500 13px var(--f-mono);color:var(--ink-3);padding:0 10px;display:grid;place-items:center;border-left:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+.q-fb:not(:empty){padding:9px 11px;border-radius:8px;font-size:15px}
+.q-fb.ok{background:var(--surface);color:var(--ok)}
+.q-fb.warn{background:var(--warn-soft);color:var(--warn)}
+.q-hints{list-style:none;padding:0;display:grid;gap:6px}
+.q-hints li{background:var(--surface-2);border-radius:8px;padding:8px 11px;font-size:14.5px;animation:pop .35s both}
+.q-hints li::before{content:"Hint  ";font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.q-sol{padding:12px 14px 12px 34px;background:var(--surface-2);border-radius:8px;display:grid;gap:8px;font-size:15px}
+.q-sol li{opacity:0;animation:pop .45s forwards;animation-delay:calc(var(--i)*.6s)}
+.q-sol li::marker{font:600 13px var(--f-mono)}
+.q-lock{font-size:13px;color:var(--ink-3)}
+.q:not(.locked) .q-lock{display:none}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.2;margin:0 .2em;font-family:var(--f-mono);font-size:.94em}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .3em .1em}
+.frac>span:last-child{padding:.1em .3em 0}
+.pct-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:12px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.pct-row label{font-weight:650}
+.hint{font-size:13.5px;color:var(--ink-3)}
+
+/* error bars figure */
+.bars{display:grid;gap:10px;padding:14px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.bar-row{display:grid;grid-template-columns:minmax(90px,150px) minmax(0,1fr) 54px;gap:10px;align-items:center;font-size:14px}
+.bar-track{height:22px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:5px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.bar-fill.hi{background:var(--acid)} .bar-fill.lo{background:var(--base)}
+.bar-row output{font:600 14px var(--f-mono);text-align:right}
+
+/* reflect */
+.reflect{display:grid;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.reflect h4{font:700 16px var(--f-display);font-stretch:108%}
+.ideas{display:grid;gap:8px}
+.idea{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:9px 11px;border-radius:8px;background:var(--surface-2);font-size:14.5px}
+.idea input,.reason input{width:19px;height:19px;margin-top:2px;accent-color:var(--base)}
+
+/* tables */
+.scroll-x{overflow-x:auto;max-width:100%;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tbl{border-collapse:collapse;width:100%;font-size:14.5px}
+.tbl th,.tbl td{border-bottom:1px solid var(--line-2);padding:9px 10px;text-align:left;vertical-align:middle}
+.tbl tr:last-child td,.tbl tr:last-child th{border-bottom:0}
+.tbl thead th{font:600 11.5px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);border-bottom:2px solid var(--ink);white-space:nowrap}
+.tbl td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.tbl .res{display:block;margin-top:5px;font-size:13px}
+.tbl .res.ok{color:var(--ok)} .tbl .res.warn{color:var(--warn)}
+.dotk{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;vertical-align:-1px;border:1px solid rgba(0,0,0,.2)}
+.dotk.vin{background:var(--liq-vin)} .dotk.soda{background:var(--liq-soda)} .dotk.water{background:var(--liq-water)}
+.sw{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.25);vertical-align:-2px;margin-right:6px}
+.tbl input.note{font:400 14px var(--f-body);width:100%;min-width:140px;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:6px;padding:6px 8px}
+.tbl tr.cur{background:var(--base-soft)}
+.mini{display:inline-flex;align-items:center;gap:8px}
+.mini input{font:500 16px var(--f-mono);width:8ch;color:var(--ink);background:var(--surface);border:1.5px solid var(--ink-3);border-radius:6px;padding:6px 8px}
+.mini .ico{font-weight:700;min-width:1.2em}
+.mini.ok input{border-color:var(--ok)} .mini.ok .ico{color:var(--ok)}
+.mini.warn input{border-color:var(--warn)} .mini.warn .ico{color:var(--warn)}
+
+/* equation */
+.eq{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font:500 17px var(--f-mono);padding:14px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.eq select{font-family:var(--f-mono)}
+.fb{padding:9px 11px;border-radius:8px;font-size:15px}
+.fb:empty{display:none}
+.fb.ok{background:var(--ok-soft);color:var(--ok)}
+.fb.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* sim */
+.hud{display:flex;flex-wrap:wrap;gap:8px}
+.sim-ctl{display:flex;flex-wrap:wrap;gap:8px}
+.hint-line{font-size:13.5px;color:var(--ink-3)}
+
+/* scrub */
+.scrub{display:grid;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.scrub input[type=range]{width:100%;accent-color:var(--base)}
+.scrub-out{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font:500 14px var(--f-mono)}
+.swatches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.swatch{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:center;padding:8px;border-radius:8px;background:var(--surface-2);font-size:14px}
+.swatch i{display:block;height:48px;border-radius:6px;border:1px solid rgba(0,0,0,.2);transition:background .25s}
+.chart svg{display:block;width:100%;height:auto}
+.c-axis{stroke:var(--ink-3);stroke-width:1.5}
+.c-grid{stroke:var(--line-2);stroke-width:1}
+.c-curve{fill:none;stroke:var(--ink);stroke-width:2.8;stroke-linejoin:round}
+.c-band-a{fill:var(--acid-soft)} .c-band-b{fill:var(--base-soft)}
+.c-pred{stroke:var(--ok);stroke-width:2;stroke-dasharray:6 4}
+.c-cur{stroke:var(--mid);stroke-width:2.5}
+.c-pt{fill:var(--mid);stroke:var(--surface);stroke-width:2}
+.legend-line{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13.5px;color:var(--ink-2)}
+.legend-line i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px;border:1px solid var(--line)}
+
+/* reasons */
+.reasons{display:grid;gap:8px}
+.reason{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:10px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-size:15px}
+.reason small{display:block;margin-top:4px;font-size:13.5px}
+.reason.right{border-color:var(--ok);background:var(--ok-soft)}
+.reason.wrong{border-color:var(--warn);background:var(--warn-soft)}
+.reason small:empty{display:none}
+
+/* summary */
+.summary{width:100%;min-height:300px;font:13.5px/1.55 var(--f-mono);color:var(--ink);background:var(--surface);border:1.5px solid var(--ink-3);border-radius:10px;padding:14px;resize:vertical}
+.foot{padding-block:56px 72px}
+.foot p{color:var(--ink-3);font-size:13.5px;max-width:70ch}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:10px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:80;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition:none!important}
+  .h-drop{opacity:0}
+  .h-spot.a{transform:scale(1);fill:var(--paper-blue)}
+  .h-spot.b{transform:scale(1);fill:var(--paper-red)}
+}
+</style>
+<a class="skip" href="#main">Skip to the protocol</a>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <div class="brand">Science Club</div>
+    <div class="trackwrap">
+      <nav class="track" aria-label="The 40-minute plan, drawn to scale">
+        <a class="seg" style="--w:8" href="#act1" data-seg="0" title="Activity 1, 0 to 8 minutes"><b>1</b><span>Prepare</span><i>0–8′</i></a>
+        <a class="seg" style="--w:10" href="#act2" data-seg="1" title="Activity 2, 8 to 18 minutes"><b>2</b><span>Litmus</span><i>8–18′</i></a>
+        <a class="seg" style="--w:15" href="#act3" data-seg="2" title="Activity 3, 18 to 33 minutes"><b>3</b><span>React</span><i>18–33′</i></a>
+        <a class="seg" style="--w:7" href="#act4" data-seg="3" title="Activity 4, 33 to 40 minutes"><b>4</b><span>Analyze</span><i>33–40′</i></a>
+      </nav>
+      <div class="prog" aria-hidden="true"><div id="prog"></div></div>
+    </div>
+    <div class="clock">
+      <output id="clk" aria-label="Elapsed time">00:00</output>
+      <button class="btn small primary" id="clkBtn" type="button" disabled title="Tick all four safety boxes to start the clock">Start</button>
+      <button class="btn small ghost" id="clkReset" type="button" aria-label="Reset the clock">Reset</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <p class="eyebrow">Science Club · 40-minute bench protocol</p>
+      <h1>Solution preparation, dilution and <span class="t-acid">acid</span>–<span class="t-base">base</span> titration</h1>
+      <p class="lede">Make one shared baking soda stock, dilute vinegar tenfold, then neutralise one with the other. You do the calculations. The page checks them, shows each technique step by step and lets you rehearse the reaction before you pour.</p>
+      <div class="team">
+        <label for="team">Team name</label>
+        <input class="txt" id="team" type="text" autocomplete="off" placeholder="Type your team name">
+      </div>
+    </div>
+    <svg class="hero-art" viewBox="0 0 280 260" role="img" aria-label="A drop of baking soda solution turns a red litmus strip blue, and a drop of vinegar turns a blue strip red">
+      <rect class="s-strip-r" x="46" y="70" width="64" height="150" rx="4"/>
+      <rect class="s-strip-b" x="170" y="70" width="64" height="150" rx="4"/>
+      <circle class="h-spot a" cx="78" cy="176" r="26"/>
+      <circle class="h-spot b" cx="202" cy="176" r="26"/>
+      <path class="h-drop s-soda" d="M78 128c-9 13-13 20-13 27a13 13 0 0 0 26 0c0-7-4-14-13-27z"/>
+      <path class="h-drop d2 s-vin" d="M202 128c-9 13-13 20-13 27a13 13 0 0 0 26 0c0-7-4-14-13-27z"/>
+      <text class="s-lbl" x="78" y="242" text-anchor="middle">red + base</text>
+      <text class="s-lbl" x="202" y="242" text-anchor="middle">blue + acid</text>
+    </svg>
+  </div>
+  <div class="wrap">
+    <ul class="how">
+      <li><b>Calculate</b>Type your answer and press Check. Hints are free. The worked solution unlocks after two tries.</li>
+      <li><b>Watch</b>Each technique has an animation. Step through it, replay it or play all steps.</li>
+      <li><b>Do</b>Repeat the steps at the bench. Record what you really see, then compare it with the page.</li>
+    </ul>
+    <div class="legend" role="note" aria-label="Colour key">
+      <span class="chip acid">red = acid</span><span class="chip base">blue = base</span><span class="chip mid">violet = in between</span>
+      <span class="hint">Colours in the drawings are added to help you see the liquids.</span>
+    </div>
+  </div>
+</section>
+
+<section class="wrap sect" id="safety" aria-labelledby="safety-h">
+  <h2 id="safety-h">Safety first <span class="chip" id="safeStatus">0 / 4 confirmed</span></h2>
+  <p class="lead">Tick all four boxes as a team. The clock unlocks when you have.</p>
+  <div class="safe-grid">
+    <label class="safe"><input type="checkbox" class="safe-cb">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="12" width="12" height="10" rx="4"/><rect x="19" y="12" width="12" height="10" rx="4"/><path d="M15 17h4M3 17H1M31 17h2"/></svg>
+      <span><b>Wear goggles</b> before any liquid is poured.</span></label>
+    <label class="safe"><input type="checkbox" class="safe-cb">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><path d="M9 15l2 15h12l2-15"/><path d="M13 10c0-2 2-3 2-5M19 10c0-2 2-3 2-5"/></svg>
+      <span><b>Never seal</b> the reaction vessel. The reaction makes gas.</span></label>
+    <label class="safe"><input type="checkbox" class="safe-cb">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><path d="M3 17c4-7 9-9 14-9s10 2 14 9c-4 7-9 9-14 9S7 24 3 17z"/><circle cx="17" cy="17" r="4"/><path d="M6 29L28 5"/></svg>
+      <span><b>Keep solutions away from your eyes.</b> If a splash happens, rinse with water and tell your facilitator.</span></label>
+    <label class="safe"><input type="checkbox" class="safe-cb">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><path d="M13 4h8M15 4v9L7 27c-1 3 0 4 2 4h16c2 0 3-1 2-4L19 13V4"/><path d="M13 21l8 7M21 21l-8 7"/></svg>
+      <span><b>Never mix vinegar</b> with bleach or cleaning products.</span></label>
+  </div>
+</section>
+
+<section class="wrap sect" id="kit" aria-labelledby="kit-h">
+  <h2 id="kit-h">Team kit <span class="chip" id="kitStatus">0 / 5 collected</span></h2>
+  <p class="lead">Quantities are per team. The baking soda stock is shared by all teams.</p>
+  <div class="kit-wrap">
+    <table class="kit">
+      <thead><tr><th scope="col">Got it</th><th scope="col">Material</th><th scope="col">Amount per team</th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox" class="kit-cb" aria-label="Diluted vinegar collected"></td><th scope="row">Diluted vinegar</th><td class="amt">10–15 mL</td></tr>
+        <tr><td><input type="checkbox" class="kit-cb" aria-label="Baking soda stock collected"></td><th scope="row">Baking soda stock</th><td class="amt">up to 20–30 mL</td></tr>
+        <tr><td><input type="checkbox" class="kit-cb" aria-label="Water collected"></td><th scope="row">Water</th><td class="amt">10–20 mL</td></tr>
+        <tr><td><input type="checkbox" class="kit-cb" aria-label="Litmus strips collected"></td><th scope="row">Red and blue litmus</th><td class="amt">a few small strips</td></tr>
+        <tr><td><input type="checkbox" class="kit-cb" aria-label="Clear cups collected"></td><th scope="row">Clear cups</th><td class="amt">3–4</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="bonus">
+    <summary>Bonus: how many teams can share the solutions?</summary>
+    <div class="n-row"><label for="kitN"><b>Teams in your session</b></label>
+      <div class="q-field"><input id="kitN" type="text" inputmode="numeric" value="6" aria-label="Number of teams"><span class="unit">teams</span></div></div>
+    <div class="calc">
+      <div class="q-slot" data-q="K1"></div>
+      <div class="q-slot" data-q="K2"></div>
+    </div>
+  </details>
+</section>
+
+<!-- ============ ACTIVITY 1 ============ -->
+<section class="station" id="act1" aria-labelledby="act1-h">
+  <div class="wrap">
+    <header class="st-head">
+      <span class="st-num" aria-hidden="true">1</span>
+      <div><p class="st-time">0–8 min · Activity 1</p><h2 id="act1-h">Prepare and dilute</h2></div>
+    </header>
+    <p class="st-goal">Calculate the stock concentration and explain why a portion of the stock is used instead of weighing a small mass for every team.</p>
+    <div class="datacard" role="note"><span class="dc-t">Data card</span>
+      <span class="chip">H 1.008</span><span class="chip">C 12.01</span><span class="chip">O 16.00</span><span class="chip">Na 22.99</span><span class="dc-u">g/mol</span>
+      <span class="chip">1 L = 1000 mL</span><span class="chip">1 mol/L = 1 mmol/mL</span></div>
+
+    <div class="block" id="solA">
+      <h3 class="sub"><span class="tag">1A</span>Solution A · baking soda stock</h3>
+      <p class="sub-note">Watch the technique, then work out the concentration yourself. Each answer unlocks the next step. The facilitator may have prepared the stock already. Your team still does the calculation.</p>
+      <div class="stepper" id="stepA">
+        <ol class="steps"></ol>
+        <div class="stage-col">
+          <figure class="stage"><svg id="svgA" viewBox="0 0 520 320" role="img" aria-label="Animated drawing: weigh 5 grams of baking soda, dissolve it in about 400 millilitres of water, make up to 500 millilitres, mix and label"></svg></figure>
+          <p class="cap" aria-live="polite"></p>
+          <div class="st-ctl"></div>
+        </div>
+      </div>
+      <div class="calc">
+        <h4>Your calculation <span class="calc-n">C = n ÷ V, and n = m ÷ M</span></h4>
+        <div class="q-slot" data-q="A1"></div>
+        <div class="q-slot" data-q="A2"></div>
+        <div class="q-slot" data-q="A3"></div>
+      </div>
+    </div>
+
+    <div class="block" id="solB">
+      <h3 class="sub"><span class="tag">1B</span>Solution B · diluted vinegar</h3>
+      <p class="sub-note">Dilution adds solvent. It does not add or remove acid, so the same particles spread through a bigger volume.</p>
+      <div class="stepper" id="stepB">
+        <ol class="steps"></ol>
+        <div class="stage-col">
+          <figure class="stage"><svg id="svgB" viewBox="0 0 520 320" role="img" aria-label="Animated drawing: measure 5 millilitres of vinegar, add 45 millilitres of water, mix and label"></svg></figure>
+          <p class="cap" aria-live="polite"></p>
+          <div class="st-ctl"></div>
+        </div>
+      </div>
+      <div class="pct-row">
+        <label for="pct">Read your vinegar bottle: acetic acid</label>
+        <div class="q-field"><input id="pct" type="text" inputmode="decimal" value="5" aria-describedby="pctHint"><span class="unit">%</span></div>
+        <span class="hint" id="pctHint">Most household vinegar is 5%. This page accepts 2–9%. You need the number in Activity 3.</span>
+      </div>
+      <div class="calc">
+        <h4>Your calculation</h4>
+        <div class="q-slot" data-q="B1"></div>
+      </div>
+    </div>
+
+    <div class="block" id="why">
+      <h3 class="sub"><span class="tag">1C</span>Why take a portion of the stock?</h3>
+      <p class="sub-note">Suppose every team weighed its own baking soda and made about 25 mL of solution at the same concentration. Test that idea with numbers. Assume your balance reads to ±0.01 g.</p>
+      <div class="calc">
+        <div class="q-slot" data-q="W1"></div>
+        <div class="q-slot" data-q="W2"></div>
+      </div>
+      <figure class="bars" id="werr" hidden>
+        <div class="bar-row"><span>Weigh 0.25 g</span><div class="bar-track"><div class="bar-fill hi" data-w="100"></div></div><output>4%</output></div>
+        <div class="bar-row"><span>Weigh 5.00 g</span><div class="bar-track"><div class="bar-fill lo" data-w="5"></div></div><output>0.2%</output></div>
+        <figcaption class="hint">Relative weighing error for the same balance. The small sample is 20 times less reliable.</figcaption>
+      </figure>
+      <div class="reflect" data-reflect="R1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACTIVITY 2 ============ -->
+<section class="station" id="act2" aria-labelledby="act2-h">
+  <div class="wrap">
+    <header class="st-head">
+      <span class="st-num" aria-hidden="true">2</span>
+      <div><p class="st-time">8–18 min · Activity 2</p><h2 id="act2-h">Test with litmus</h2></div>
+    </header>
+    <p class="st-goal">Take 2–3 mL each of diluted vinegar, baking soda stock and water. Test separate drops using red and blue litmus paper and record the colour changes.</p>
+    <div class="block">
+      <h3 class="sub"><span class="tag">2A</span>Predict, test, compare</h3>
+      <div class="split">
+        <div style="display:grid;gap:14px;min-width:0">
+          <ol class="bench">
+            <li>Pour 2–3 mL of each liquid into its own clear cup.</li>
+            <li>Put a separate drop of each liquid on its own red strip and its own blue strip.</li>
+            <li>Record the colour changes. First fill in your predictions here.</li>
+          </ol>
+          <div class="scroll-x"><table class="tbl" id="litTable">
+            <thead><tr><th scope="col">Liquid</th><th scope="col">Red litmus</th><th scope="col">Blue litmus</th><th scope="col">It is</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+          <div class="sim-ctl">
+            <button class="btn primary" id="litRun" type="button" disabled>Run the test</button>
+            <button class="btn ghost" id="litReset" type="button">Start over</button>
+          </div>
+          <p class="fb" id="litFb" role="status" aria-live="polite"></p>
+          <label for="litNote"><b>Your bench notes</b> <span class="hint">What did you actually see? Any shade that surprised you?</span></label>
+          <input class="txt" id="litNote" type="text" autocomplete="off">
+        </div>
+        <div class="stage-col">
+          <figure class="stage"><svg id="svgL" viewBox="0 0 520 300" role="img" aria-label="Three cups: diluted vinegar, baking soda stock and water, each with a red and a blue litmus strip above it"></svg></figure>
+          <p class="cap" id="litCap" aria-live="polite">Pick a prediction for every cell, then run the test.</p>
+        </div>
+      </div>
+      <div class="reflect" id="litMcq"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACTIVITY 3 ============ -->
+<section class="station" id="act3" aria-labelledby="act3-h">
+  <div class="wrap">
+    <header class="st-head">
+      <span class="st-num" aria-hidden="true">3</span>
+      <div><p class="st-time">18–33 min · Activity 3</p><h2 id="act3-h">Acid–base reaction challenge</h2></div>
+    </header>
+    <p class="st-goal">Add baking soda stock to diluted vinegar a little at a time and compare how the mixture changes. The goal is to compare the changes as more base is added, not to find an exact equivalence point.</p>
+    <p class="callout safety-c"><b>Goggles on. Do not seal the cup.</b> The reaction releases gas and keep solutions away from your eyes.</p>
+
+    <div class="block">
+      <h3 class="sub"><span class="tag">3A</span>What reacts with what?</h3>
+      <p class="sub-note">Complete the equation. Then watch the particles pair up.</p>
+      <div class="eq" id="eqBox">
+        <span>CH<sub>3</sub>COOH + NaHCO<sub>3</sub> →</span>
+        <select id="eq1" aria-label="First product">
+          <option value="">product?</option><option value="naoh">NaOH</option><option value="ace">CH₃COONa</option><option value="carb">Na₂CO₃</option><option value="acid">CH₃COOH</option>
+        </select>
+        <span>+ H<sub>2</sub>O +</span>
+        <select id="eq2" aria-label="Second product">
+          <option value="">gas?</option><option value="o2">O₂</option><option value="co2">CO₂</option><option value="h2">H₂</option><option value="ch4">CH₄</option>
+        </select>
+        <button class="btn primary" id="eqCheck" type="button">Check</button>
+      </div>
+      <p class="fb" id="eqFb" role="status" aria-live="polite"></p>
+      <figure class="stage"><svg id="svgR" viewBox="0 0 520 190" role="img" aria-label="Five acid particles pair one-to-one with five baking soda particles and release five carbon dioxide bubbles"></svg></figure>
+    </div>
+
+    <div class="block">
+      <h3 class="sub"><span class="tag">3B</span>Predict the volume you will need</h3>
+      <p class="sub-note">Before you add anything, work out how much stock should neutralise 10 mL of diluted vinegar. Your answer is a prediction to compare with, not a measurement.</p>
+      <div class="calc">
+        <div class="q-slot" data-q="P1"></div>
+        <div class="q-slot" data-q="P2"></div>
+        <div class="q-slot" data-q="P3"></div>
+        <div class="q-slot" data-q="P4"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3 class="sub"><span class="tag">3C</span>Bench run</h3>
+      <ol class="bench">
+        <li>Place 10 mL of diluted vinegar in a cup.</li>
+        <li>Add 1 mL portions of baking soda stock, stirring after each addition.</li>
+        <li>Record the volume added and observe the bubbling.</li>
+        <li>Test a separate drop of the mixture with red litmus.</li>
+      </ol>
+      <p class="sub-note">The cup below is a rehearsal that follows the same steps. Run it alongside your real cup and write down what you see at the bench.</p>
+      <div class="split">
+        <div class="stage-col" style="position:static">
+          <figure class="stage"><svg id="svgC" viewBox="0 0 520 340" role="img" aria-label="A cup of diluted vinegar receiving 1 millilitre portions of baking soda stock from a syringe, with a ruler showing the volume added"></svg></figure>
+          <div class="hud" aria-live="polite">
+            <span class="chip" id="rdAdded">Added 0 mL</span>
+            <span class="chip" id="rdTotal">In cup 10 mL</span>
+            <span class="chip mid" id="rdBub">Bubbling —</span>
+          </div>
+        </div>
+        <div style="display:grid;gap:12px;min-width:0">
+          <div class="sim-ctl">
+            <button class="btn primary" id="simAdd" type="button">Add 1 mL stock</button>
+            <button class="btn" id="simRed" type="button">Test red litmus</button>
+            <button class="btn ghost" id="simBlue" type="button">Test blue litmus (extra)</button>
+            <button class="btn ghost" id="simReset" type="button">Reset cup</button>
+          </div>
+          <p class="hint-line" id="simHint">Add 1 mL at a time. Test red litmus after each addition, or at least every second one.</p>
+          <div class="scroll-x"><table class="tbl" id="logTable">
+            <thead><tr><th scope="col">Added (mL)</th><th scope="col">Bubbling</th><th scope="col">Red litmus</th><th scope="col">Blue litmus</th><th scope="col">Your notes</th></tr></thead>
+            <tbody id="logBody"></tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3 class="sub"><span class="tag">3D</span>How much of the acid has been used up?</h3>
+      <p class="sub-note">For each volume, work out the base added as a percentage of the acid in the cup. Use your answers to P3 and A3. A value over 100% means base is left over.</p>
+      <div class="calc">
+        <div class="chips" style="display:flex;flex-wrap:wrap;gap:8px"><span class="chip acid" id="chipAcid">acid in cup: P3</span><span class="chip base" id="chipBase">stock: 0.119 mmol/mL</span></div>
+        <div class="scroll-x"><table class="tbl" id="tblT"><thead><tr><th scope="col">Stock added</th><th scope="col">Base ÷ acid × 100</th></tr></thead><tbody></tbody></table></div>
+        <p class="fb" id="tFb" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACTIVITY 4 ============ -->
+<section class="station" id="act4" aria-labelledby="act4-h">
+  <div class="wrap">
+    <header class="st-head">
+      <span class="st-num" aria-hidden="true">4</span>
+      <div><p class="st-time">33–40 min · Activity 4</p><h2 id="act4-h">Analyze</h2></div>
+    </header>
+    <p class="st-goal">Compare observations, explain the reaction and identify why litmus paper cannot determine an exact titration endpoint.</p>
+
+    <div class="block">
+      <h3 class="sub"><span class="tag">4A</span>Prediction against observation</h3>
+      <div class="n-row"><label for="obs"><b>Last volume at which you saw bubbling</b></label>
+        <div class="q-field"><input id="obs" type="text" inputmode="decimal" aria-label="Observed volume in millilitres" placeholder="mL"><span class="unit">mL</span></div></div>
+      <div class="calc"><div class="q-slot" data-q="C1"></div></div>
+    </div>
+
+    <div class="block">
+      <h3 class="sub"><span class="tag">4B</span>Where do the papers change colour?</h3>
+      <p class="sub-note">Drag the slider to add stock. The curve comes from a simplified model of acetic acid and bicarbonate, so real papers will look fuzzier than this.</p>
+      <div class="scrub">
+        <div class="chart"><svg id="svgChart" viewBox="0 0 600 300" role="img" aria-label="Model curve of pH against millilitres of baking soda stock added, with the ranges where red and blue litmus change colour"></svg></div>
+        <div class="legend-line"><span><i style="background:var(--acid-soft)"></i>blue litmus turns red (pH 6.5 → 4.5)</span><span><i style="background:var(--base-soft)"></i>red litmus turns blue (pH 7.5 → 8.5)</span><span><i style="background:transparent;border:0;border-top:2px dashed var(--ok);height:0;vertical-align:4px"></i>your prediction (after P4)</span></div>
+        <label for="scrub"><b>Stock added:</b> <output id="scrubOut" class="chip">0.0 mL</output></label>
+        <input id="scrub" type="range" min="0" max="14" step="0.1" value="0" aria-describedby="scrubTxt">
+        <div class="swatches">
+          <div class="swatch"><i id="swRed"></i><span><b>Red strip</b><br><span id="swRedT"></span></span></div>
+          <div class="swatch"><i id="swBlue"></i><span><b>Blue strip</b><br><span id="swBlueT"></span></span></div>
+        </div>
+        <p id="scrubTxt" class="sub-note"></p>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3 class="sub"><span class="tag">4C</span>Why can litmus not find an exact endpoint?</h3>
+      <p class="sub-note">Tick every statement you think is a good reason. Then check.</p>
+      <div class="reasons" id="reasons"></div>
+      <div class="sim-ctl"><button class="btn primary" id="reasonCheck" type="button">Check my choices</button></div>
+      <p class="fb" id="reasonFb" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="block">
+      <h3 class="sub"><span class="tag">4D</span>Explain the reaction</h3>
+      <div class="reflect" data-reflect="R2"></div>
+    </div>
+
+    <div class="block">
+      <h3 class="sub"><span class="tag">4E</span>Team summary</h3>
+      <p class="sub-note">This fills in as you work. Copy it and paste it into your report or send it to your facilitator.</p>
+      <textarea class="summary" id="summary" readonly aria-label="Team summary text"></textarea>
+      <div class="sim-ctl"><button class="btn primary" id="copyBtn" type="button">Copy summary</button><span class="hint" id="copyFb" role="status" aria-live="polite"></span></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap foot">
+  <p>Concentrations assume 5.00 g of NaHCO₃ made up to 500 mL, and vinegar strength as you entered it (g per 100 mL). The bubbling and litmus colours in the rehearsal cup, and the pH curve, come from a simplified model with CO₂ escaping from an open cup. Your bench results will differ a little. Write down what you really see.</p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+'use strict';
+
+/* ================= helpers ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const sleep = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+function tween(ms, fn, alive) {
+  return new Promise(res => {
+    if (reduce || ms <= 0) { fn(1); res(); return; }
+    const t0 = performance.now();
+    const step = now => {
+      if (alive && !alive()) { res(); return; }
+      const k = clamp((now - t0) / ms, 0, 1);
+      fn(ease(k));
+      if (k < 1) requestAnimationFrame(step); else res();
+    };
+    requestAnimationFrame(step);
+  });
+}
+function mk(seed) {
+  let a = seed >>> 0;
+  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+function S(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function H(tag, cls, html) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html != null) e.innerHTML = html;
+  return e;
+}
+const fx = (x, d = 1) => Number(x).toFixed(d);
+function sig(x, n = 3) {
+  if (!isFinite(x)) return '—';
+  if (x === 0) return '0';
+  const p = Math.pow(10, n - 1 - Math.floor(Math.log10(Math.abs(x))));
+  return String(Math.round(x * p) / p);
+}
+function parseNum(s) {
+  if (s == null) return NaN;
+  s = String(s).trim().replace(/\s+/g, '').replace(',', '.');
+  s = s.replace(/[×x*]10\^?\(?([-+]?\d+)\)?/i, 'e$1');
+  const m = s.match(/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?/i);
+  return m ? parseFloat(m[0]) : NaN;
+}
+let toastT;
+function toast(msg) {
+  const t = $('#toast'); if (!t) return;
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 4200);
+}
+const api = {};   // late-bound hooks between parts
+
+/* ================= chemistry model ================= */
+const MW_S = 84.01, MW_A = 60.05;
+const C_ST = (5 / MW_S) / 0.5;               // mol/L = mmol/mL
+const st = { pct: 5 };
+const c1 = () => st.pct * 10 / MW_A;          // mol/L, undiluted vinegar
+const c2 = () => c1() / 10;                   // mol/L, diluted
+const nAcid = () => c2() * 10;                // mmol in 10 mL cup
+const vEq = () => nAcid() / C_ST;             // mL of stock
+const pctS = () => String(Number(st.pct.toFixed(1)));
+const Ka = Math.pow(10, -4.76), K1 = Math.pow(10, -6.35), K2 = Math.pow(10, -10.33);
+
+/* pH after V mL of stock is added to 10 mL diluted vinegar (CO2 assumed to escape) */
+function phAt(V) {
+  const Vt = 10 + V, ca = c2() * 10 / Vt, na = C_ST * V / Vt, cc = Math.max(0, na - ca);
+  const f = pH => {
+    const h = Math.pow(10, -pH), oh = 1e-14 / h, a = ca * Ka / (Ka + h), d = h * h + K1 * h + K1 * K2;
+    return na + h - oh - a - cc * ((K1 * h / d) + 2 * (K1 * K2 / d));
+  };
+  let lo = 0, hi = 14;
+  for (let i = 0; i < 50; i++) { const m = (lo + hi) / 2; if (f(m) > 0) lo = m; else hi = m; }
+  return (lo + hi) / 2;
+}
+const RGB = { red: [214, 58, 52], blue: [49, 88, 201] };
+const mixRGB = (a, b, t) => 'rgb(' + a.map((v, i) => Math.round(lerp(v, b[i], t))).join(',') + ')';
+function redPaper(pH) { const t = clamp((pH - 7.5) / 1, 0, 1); return { t, color: mixRGB(RGB.red, RGB.blue, t), label: t < .1 ? 'red (no change)' : t > .9 ? 'blue' : 'purple' }; }
+function bluePaper(pH) { const t = clamp((6.5 - pH) / 2, 0, 1); return { t, color: mixRGB(RGB.blue, RGB.red, t), label: t < .1 ? 'blue (no change)' : t > .9 ? 'red' : 'purple' }; }
+function fizzFrac(prevV) {            // share of a 1 mL portion that finds acid to react with
+  const remaining = Math.max(0, nAcid() - C_ST * prevV);
+  return clamp(remaining / C_ST, 0, 1);
+}
+const fizzWord = f => f > .75 ? 'Vigorous' : f > .35 ? 'Moderate' : f > .05 ? 'Weak' : 'None';
+
+/* ================= question engine ================= */
+const QS = {}, QT = {}, hooks = [];
+QT.EQ = { solved: false };
+const frac = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
+const solved = id => !!(QT[id] && QT[id].solved);
+const near = (v, a, o) => { const tol = o.tol == null ? .02 : o.tol, abs = o.abs || 0; return Math.abs(v - a) <= Math.max(Math.abs(a) * tol, abs); };
+function slip(v, a) {
+  const r = v / a;
+  if (isFinite(r) && r > 0) {
+    if (Math.abs(r - 1000) / 1000 < .05 || Math.abs(r - .001) / .001 < .05) return 'That looks like a unit slip of 1000 (mL and L, or mmol and mol). Check the unit next to the box.';
+    if (Math.abs(r - 10) < .5 || Math.abs(r - .1) < .01) return 'Your number is out by a factor of 10. Check a decimal point or the dilution step.';
+  }
+  return null;
+}
+function refreshLocks() { $$('.q-slot').forEach(s => s._lock && s._lock()); }
+
+function buildQ(slot) {
+  const id = slot.dataset.q, d = QS[id];
+  if (!d) return;
+  const T = QT[id] = QT[id] || { tries: 0, hints: 0, solved: false, shown: false, value: null };
+  slot.classList.add('q');
+  slot.innerHTML =
+    `<div class="q-top"><span class="q-tag">${id}</span><div class="q-prompt"></div></div>` +
+    `<div class="q-row"><div class="q-field"><input id="in-${id}" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Answer for ${id}" placeholder="${d.ph || 'answer'}"><span class="unit">${d.unit || ''}</span></div>` +
+    `<button class="btn primary q-check" type="button">Check</button><button class="btn q-hintb" type="button">Hint</button><button class="btn ghost q-solb" type="button" disabled>Worked solution</button></div>` +
+    `<p class="q-fb" role="status" aria-live="polite"></p><ul class="q-hints"></ul><ol class="q-sol" hidden></ol><p class="q-lock"></p>`;
+  const $p = $('.q-prompt', slot), $i = $('input', slot), $c = $('.q-check', slot), $h = $('.q-hintb', slot),
+        $s = $('.q-solb', slot), $f = $('.q-fb', slot), $hl = $('.q-hints', slot), $sl = $('.q-sol', slot), $lk = $('.q-lock', slot);
+  const fb = (k, h) => { $f.className = 'q-fb ' + k; $f.innerHTML = h; };
+  const hintsList = () => typeof d.hints === 'function' ? d.hints() : (d.hints || []);
+  slot._refresh = () => { $p.innerHTML = d.prompt(); };
+  slot._lock = () => {
+    const lk = !!d.needs && !solved(d.needs);
+    slot.classList.toggle('locked', lk);
+    $i.disabled = $c.disabled = lk;
+    $h.disabled = lk || T.hints >= hintsList().length;
+    if (lk) { $s.disabled = true; $lk.textContent = 'Unlocks when ' + (d.needsLabel || d.needs) + ' is correct.'; }
+    else { $lk.textContent = ''; $s.disabled = !(T.solved || T.tries >= 2); }
+  };
+  slot._reset = () => {
+    Object.assign(T, { tries: 0, hints: 0, solved: false, shown: false, value: null });
+    $i.value = ''; fb('', ''); $hl.innerHTML = ''; $sl.hidden = true; $sl.innerHTML = '';
+    slot.classList.remove('solved'); $h.textContent = 'Hint'; $s.textContent = 'Worked solution';
+    slot._refresh(); slot._lock();
+  };
+  function check() {
+    const v = parseNum($i.value), ans = d.answer();
+    if (!isFinite(v)) { fb('warn', 'Type a number first. The unit is shown in the box.'); return; }
+    if (!isFinite(ans)) { fb('warn', d.needMsg || 'Fill in the number above first.'); return; }
+    T.tries++; T.value = v;
+    if (near(v, ans, d)) {
+      T.solved = true; slot.classList.add('solved');
+      fb('ok', '<b>Correct.</b> ' + (d.ok ? d.ok(ans) : ''));
+      if (d.onSolved) d.onSolved(v, ans);
+      hooks.forEach(h => h(id));
+      refreshLocks();
+    } else {
+      let m = null;
+      for (const t of (d.traps || [])) { const tv = t.v(); if (isFinite(tv) && near(v, tv, { tol: t.tol == null ? .03 : t.tol, abs: t.abs })) { m = t.msg; break; } }
+      if (!m) m = slip(v, ans);
+      if (!m) m = v > ans ? 'A little too high. Go back over each step.' : 'A little too low. Go back over each step.';
+      if (T.tries >= 2) m += ' The worked solution is now unlocked.';
+      fb('warn', '<b>Not yet.</b> ' + m);
+    }
+    $s.disabled = !(T.solved || T.tries >= 2);
+  }
+  $c.addEventListener('click', check);
+  $i.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); check(); } });
+  $h.addEventListener('click', () => {
+    const hs = hintsList();
+    if (T.hints < hs.length) { $hl.appendChild(H('li', null, hs[T.hints])); T.hints++; }
+    $h.textContent = T.hints >= hs.length ? 'No more hints' : 'Hint (' + T.hints + '/' + hs.length + ')';
+    $h.disabled = T.hints >= hs.length;
+  });
+  $s.addEventListener('click', () => {
+    if (!$sl.hidden) { $sl.hidden = true; $s.textContent = 'Worked solution'; return; }
+    $sl.innerHTML = '';
+    (typeof d.solution === 'function' ? d.solution() : d.solution).forEach((t, i) => { const li = H('li', null, t); li.style.setProperty('--i', i); $sl.appendChild(li); });
+    $sl.hidden = false; T.shown = true; $s.textContent = 'Hide solution';
+  });
+  slot._refresh(); slot._lock();
+}
+
+/* ---- question definitions ---- */
+QS.A1 = {
+  prompt: () => '<b>Molar mass.</b> Add up the atomic masses in one formula unit of sodium bicarbonate, NaHCO<sub>3</sub>.',
+  unit: 'g/mol', answer: () => MW_S, tol: .006,
+  traps: [
+    { v: () => 83.0, tol: .004, msg: 'That is 83.0, so the hydrogen is missing. NaHCO<sub>3</sub> has one Na, one H, one C and three O.' },
+    { v: () => 52.0, tol: .01, msg: 'Count all three oxygen atoms: 3 × 16.00 = 48.00.' }],
+  hints: ['List the atoms in NaHCO<sub>3</sub>. How many of each are there?', 'Oxygen appears three times: 3 × 16.00 = 48.00.', '22.99 + 1.008 + 12.01 + 48.00 = ?'],
+  solution: () => ['Atoms: 1 Na, 1 H, 1 C, 3 O', 'M = 22.99 + 1.008 + 12.01 + 3 × 16.00', 'M = 22.99 + 1.008 + 12.01 + 48.00 = <b>84.01 g/mol</b>'],
+  ok: () => 'M(NaHCO<sub>3</sub>) = 84.01 g/mol.'
+};
+QS.A2 = {
+  needs: 'A1', needsLabel: 'A1',
+  prompt: () => '<b>Moles.</b> How many moles of NaHCO<sub>3</sub> are in 5.00 g? Use n = m ÷ M.',
+  unit: 'mol', answer: () => 5 / MW_S, tol: .02,
+  traps: [
+    { v: () => 5 * MW_S, tol: .02, msg: 'You multiplied. Moles = mass ÷ molar mass.' },
+    { v: () => MW_S / 5, tol: .02, msg: 'Inverted. Divide the mass by the molar mass, not the other way round.' }],
+  hints: ['n = m ÷ M', 'm = 5.00 g and M = 84.01 g/mol.', 'n = 5.00 ÷ 84.01'],
+  solution: () => ['n = m ÷ M', 'n = ' + frac('5.00 g', '84.01 g/mol'), 'n = <b>0.0595 mol</b>'],
+  ok: () => 'n = 0.0595 mol.'
+};
+QS.A3 = {
+  needs: 'A2', needsLabel: 'A2',
+  prompt: () => '<b>Concentration.</b> The 5.00 g is dissolved and made up to 500 mL. Find the concentration C in mol/L. Convert the volume to litres first.',
+  unit: 'mol/L', answer: () => C_ST, tol: .02,
+  traps: [
+    { v: () => 5 / MW_S, tol: .02, msg: 'That is the number of moles. Divide by the volume in litres (500 mL = 0.500 L).' },
+    { v: () => 10, tol: .02, msg: 'That is grams per litre. Convert grams to moles first.' },
+    { v: () => C_ST * 1000, tol: .03, msg: '119 would be mmol/L. Give the answer in mol/L.' },
+    { v: () => 5 / MW_S / 500, tol: .03, msg: 'Convert mL to L first: 500 mL = 0.500 L.' }],
+  hints: ['C = n ÷ V, with V in litres.', '500 mL = 0.500 L.', 'C = 0.0595 mol ÷ 0.500 L'],
+  solution: () => ['C = n ÷ V', 'C = ' + frac('0.0595 mol', '0.500 L'), 'C = <b>0.119 mol/L</b> (the same as 0.119 mmol/mL)'],
+  ok: () => 'C = 0.119 mol/L. Write it on your bottle label.',
+  onSolved: () => { api.tagA && api.tagA(); $('#chipBase').textContent = 'stock: ' + sig(C_ST, 3) + ' mmol/mL'; }
+};
+QS.B1 = {
+  prompt: () => '<b>Dilution factor.</b> 5 mL of vinegar is mixed with 45 mL of water. By what factor is the vinegar diluted?',
+  unit: 'times', ph: 'times', answer: () => 10, tol: .01,
+  traps: [
+    { v: () => 9, tol: .01, msg: '45 mL is only the water. The final volume is vinegar plus water.' },
+    { v: () => .1, tol: .01, msg: '0.1 is the fraction that is vinegar. The factor is final volume ÷ starting volume.' },
+    { v: () => 50, tol: .01, msg: '50 mL is the final volume. Divide it by the 5 mL you started with.' }],
+  hints: ['Dilution factor = final volume ÷ starting volume.', 'Final volume = 5 mL vinegar + 45 mL water.'],
+  solution: () => ['Final volume = 5 mL + 45 mL = 50 mL', 'Factor = ' + frac('50 mL', '5 mL') + ' = <b>10</b>', 'The diluted vinegar is 10 times weaker than the bottle.'],
+  ok: () => 'Ten-fold diluted.',
+  onSolved: () => api.badgeB && api.badgeB()
+};
+QS.W1 = {
+  prompt: () => '<b>If every team weighed its own.</b> A team needs about 25 mL of Solution A at 0.119 mol/L. What mass of NaHCO<sub>3</sub> would it have to weigh?',
+  unit: 'g', answer: () => C_ST * 0.025 * MW_S, tol: .03,
+  traps: [
+    { v: () => C_ST * 0.025, tol: .03, msg: 'That is moles. Multiply by 84.01 g/mol to get grams.' },
+    { v: () => C_ST * 25 * MW_S, tol: .03, msg: 'Convert 25 mL to 0.025 L first.' }],
+  hints: ['5.00 g makes 500 mL. What fraction of 500 mL is 25 mL?', 'mass = 5.00 g × (25 ÷ 500)'],
+  solution: () => ['25 mL ÷ 500 mL = 0.05', 'mass = 0.05 × 5.00 g = <b>0.25 g</b>', 'Check: n = 0.119 mol/L × 0.025 L = 0.00298 mol, and m = 0.00298 mol × 84.01 g/mol = 0.25 g'],
+  ok: () => 'About 0.25 g. That is a very small amount to weigh.'
+};
+QS.W2 = {
+  needs: 'W1', needsLabel: 'W1',
+  prompt: () => '<b>Weighing error.</b> The balance reads to ±0.01 g. What is the relative error when you weigh 0.25 g? Give a percentage.',
+  unit: '%', answer: () => 4, tol: .03,
+  traps: [
+    { v: () => .04, tol: .03, msg: 'Multiply by 100 to give a percentage.' },
+    { v: () => 25, tol: .03, msg: 'Inverted. Relative error = error ÷ amount.' }],
+  hints: ['relative error = (error ÷ amount) × 100', '0.01 ÷ 0.25 = ?'],
+  solution: () => ['relative error = (0.01 g ÷ 0.25 g) × 100', '= 0.04 × 100 = <b>4%</b>', 'For the 5.00 g stock: 0.01 ÷ 5.00 × 100 = 0.2%'],
+  ok: () => '4%. Compare it with weighing 5.00 g once.',
+  onSolved: () => api.werr && api.werr()
+};
+const nTeams = () => clamp(Math.round(parseNum($('#kitN') ? $('#kitN').value : 6)) || 6, 1, 60);
+QS.K1 = {
+  prompt: () => '<b>Solution A.</b> ' + nTeams() + ' teams each take up to 30 mL. How much Solution A do they need in total? One recipe makes 500 mL.',
+  unit: 'mL', answer: () => nTeams() * 30, tol: .005,
+  hints: ['Multiply the number of teams by 30 mL.'],
+  solution: () => [nTeams() + ' × 30 mL = <b>' + nTeams() * 30 + ' mL</b>', nTeams() * 30 <= 500 ? 'One recipe (500 mL) is enough.' : 'You need more than one recipe of 500 mL.'],
+  ok: () => (nTeams() * 30 <= 500 ? 'One 500 mL recipe is enough.' : 'You need more than one recipe.')
+};
+QS.K2 = {
+  prompt: () => '<b>Solution B.</b> Each team takes up to 15 mL. One recipe makes 50 mL. How many recipes must you make for ' + nTeams() + ' teams?',
+  unit: 'recipes', answer: () => Math.ceil(nTeams() * 15 / 50), tol: 0, abs: .01,
+  traps: [{ v: () => nTeams() * 15 / 50, tol: .005, msg: 'You cannot make part of a recipe. Round up to a whole number.' }],
+  hints: ['Total needed = teams × 15 mL. Divide by 50 mL per recipe, then round up.'],
+  solution: () => [nTeams() + ' × 15 mL = ' + nTeams() * 15 + ' mL', nTeams() * 15 + ' ÷ 50 = ' + fx(nTeams() * 15 / 50, 2) + ', round up to <b>' + Math.ceil(nTeams() * 15 / 50) + '</b>'],
+  ok: () => 'Solution B runs out much sooner than the stock.'
+};
+QS.P1 = {
+  needs: 'EQ', needsLabel: 'the equation in 3A',
+  prompt: () => '<b>Vinegar strength.</b> Your label says ' + pctS() + '% acetic acid, which means ' + pctS() + ' g in every 100 mL. Acetic acid, CH<sub>3</sub>COOH, has M = 60.05 g/mol. What is its concentration in the undiluted vinegar?',
+  unit: 'mol/L', answer: () => c1(), tol: .02,
+  traps: [
+    { v: () => st.pct * 10, tol: .02, msg: 'That is g/L. Divide by 60.05 g/mol to get mol/L.' },
+    { v: () => st.pct / MW_A, tol: .02, msg: 'That used grams per 100 mL. Convert to grams per litre first (× 10).' }],
+  hints: () => [pctS() + ' g per 100 mL is how many grams per 1000 mL?', pctS() + ' × 10 = ' + fx(st.pct * 10, 0) + ' g/L', 'mol/L = (g/L) ÷ 60.05'],
+  solution: () => [pctS() + ' g per 100 mL = ' + fx(st.pct * 10, 0) + ' g per litre', 'C = ' + frac(fx(st.pct * 10, 0) + ' g/L', '60.05 g/mol') + ' = <b>' + sig(c1(), 3) + ' mol/L</b>'],
+  ok: () => sig(c1(), 3) + ' mol/L of acetic acid in the bottle.'
+};
+QS.P2 = {
+  needs: 'P1', needsLabel: 'P1',
+  prompt: () => '<b>After dilution.</b> The vinegar was diluted 10-fold. What is the acetic acid concentration of Solution B?',
+  unit: 'mol/L', answer: () => c2(), tol: .02,
+  traps: [{ v: () => c1() * 10, tol: .02, msg: 'Dilution makes it weaker. Divide by the factor, do not multiply.' }],
+  hints: ['New concentration = old concentration ÷ dilution factor.'],
+  solution: () => ['C = ' + sig(c1(), 3) + ' mol/L ÷ 10', 'C = <b>' + sig(c2(), 3) + ' mol/L</b>'],
+  ok: () => sig(c2(), 3) + ' mol/L.'
+};
+QS.P3 = {
+  needs: 'P2', needsLabel: 'P2',
+  prompt: () => '<b>Acid in the cup.</b> You put 10 mL of Solution B in the cup. How many millimoles of acetic acid is that? Remember 1 mol/L = 1 mmol/mL.',
+  unit: 'mmol', answer: () => nAcid(), tol: .02,
+  traps: [
+    { v: () => nAcid() / 1000, tol: .03, msg: 'That is in mol. Give the answer in mmol.' },
+    { v: () => c2(), tol: .02, msg: 'That is the concentration. Multiply it by the 10 mL volume.' }],
+  hints: ['mmol = concentration (mmol/mL) × volume (mL).', sig(c2(), 3) + ' × 10 = ?'],
+  solution: () => ['n = C × V', 'n = ' + sig(c2(), 3) + ' mmol/mL × 10 mL', 'n = <b>' + sig(nAcid(), 3) + ' mmol</b>'],
+  ok: () => sig(nAcid(), 3) + ' mmol of acid.',
+  onSolved: () => { $('#chipAcid').textContent = 'acid in cup: ' + sig(nAcid(), 3) + ' mmol'; }
+};
+QS.P4 = {
+  needs: 'P3', needsLabel: 'P3',
+  prompt: () => '<b>Prediction.</b> The equation shows 1 acid : 1 base. What volume of Solution A (' + sig(C_ST, 3) + ' mmol/mL) contains the same number of millimoles of NaHCO<sub>3</sub>?',
+  unit: 'mL', answer: () => vEq(), tol: .03,
+  traps: [
+    { v: () => C_ST / nAcid(), tol: .03, msg: 'Inverted. Volume = amount needed ÷ concentration of the stock.' },
+    { v: () => nAcid(), tol: .03, msg: 'That is the amount in mmol. Divide by the stock concentration to get a volume.' }],
+  hints: ['1 mmol of acid needs 1 mmol of NaHCO<sub>3</sub>.', 'Volume (mL) = amount (mmol) ÷ concentration (mmol/mL).', sig(nAcid(), 3) + ' ÷ ' + sig(C_ST, 3)],
+  solution: () => ['Mole ratio 1 : 1, so you need ' + sig(nAcid(), 3) + ' mmol of NaHCO<sub>3</sub>', 'V = n ÷ C = ' + frac(sig(nAcid(), 3) + ' mmol', sig(C_ST, 3) + ' mmol/mL'), 'V ≈ <b>' + fx(vEq(), 1) + ' mL</b>'],
+  ok: () => 'About ' + fx(vEq(), 1) + ' mL. Watch for the point where bubbling stops.',
+  onSolved: () => { api.predict && api.predict(); }
+};
+QS.C1 = {
+  prompt: () => '<b>Percent difference.</b> Enter the volume above, then compare it with your prediction of ' + fx(vEq(), 1) + ' mL. % difference = |observed − predicted| ÷ predicted × 100.',
+  unit: '%', answer: () => { const o = parseNum($('#obs') ? $('#obs').value : ''); return isFinite(o) ? Math.abs(o - vEq()) / vEq() * 100 : NaN; },
+  tol: .05, abs: 1, needMsg: 'Enter the volume where you last saw bubbling in the box above first.',
+  hints: ['Subtract the two volumes and ignore the sign.', 'Divide by the predicted volume, then multiply by 100.'],
+  solution: () => { const o = parseNum($('#obs') ? $('#obs').value : ''); if (!isFinite(o)) return ['Enter your observed volume first.']; const p = vEq(); return ['|' + sig(o, 3) + ' − ' + fx(p, 1) + '| = ' + fx(Math.abs(o - p), 2) + ' mL', frac(fx(Math.abs(o - p), 2) + ' mL', fx(p, 1) + ' mL') + ' × 100 = <b>' + fx(Math.abs(o - p) / p * 100, 1) + '%</b>']; },
+  ok: a => 'Your result is ' + fx(a, 1) + '% from the prediction. Within about 15% is good for 1 mL portions.'
+};
+
+api.refresh = () => $$('.q-slot').forEach(s => s._refresh && s._refresh());
+
+/* ================= vessels & steppers ================= */
+function vessel(parent, o) {
+  const g = S('g', null, parent), id = 'cp' + o.id;
+  const cp = S('clipPath', { id }, g);
+  S('rect', { x: o.x + 1.5, y: o.top - 6, width: o.w - 3, height: o.yb - o.top + 8 }, cp);
+  const liq = S('rect', { x: o.x + 1.5, y: o.yb, width: o.w - 3, height: 0, class: o.liq, 'clip-path': 'url(#' + id + ')' }, g);
+  const dg = S('g', { 'clip-path': 'url(#' + id + ')', opacity: 0 }, g);
+  const R = mk(o.seed || 1), dots = [];
+  for (let i = 0; i < (o.n || 0); i++) {
+    const c = S('circle', { r: o.dr || 2.6, class: 'dot ' + (o.dot || 's-dot-b') }, dg);
+    c.style.setProperty('--bx', ((R() * 2 - 1) * 3).toFixed(2) + 'px');
+    c.style.setProperty('--by', ((R() * 2 - 1) * 3).toFixed(2) + 'px');
+    c.style.setProperty('--d', (1.1 + R() * 1.4).toFixed(2) + 's');
+    c.style.animationDelay = (-R() * 2).toFixed(2) + 's';
+    dots.push({ c, u: R(), v: R() });
+  }
+  const r = Math.min(8, o.w / 4);
+  S('path', { d: `M${o.x} ${o.top} V${o.yb - r} Q${o.x} ${o.yb} ${o.x + r} ${o.yb} H${o.x + o.w - r} Q${o.x + o.w} ${o.yb} ${o.x + o.w} ${o.yb - r} V${o.top}`, class: 's-glass' }, g);
+  (o.ticks || []).forEach(t => {
+    const y = o.yb - t.v * o.ppm;
+    S('line', { x1: o.x, x2: o.x + (t.long ? 14 : 8), y1: y, y2: y, class: 's-tick' }, g);
+    if (t.l) S('text', { x: o.x - 7, y: y + 4, 'text-anchor': 'end', class: 's-lbl' }, g).textContent = t.l;
+  });
+  const v = {
+    level: 0, g, liq,
+    set(val, op) {
+      v.level = val;
+      const h = val * o.ppm;
+      liq.setAttribute('y', (o.yb - h).toFixed(2));
+      liq.setAttribute('height', (h + 3).toFixed(2));
+      if (op != null) liq.style.opacity = op;
+      dots.forEach(d => {
+        d.c.setAttribute('cx', (o.x + 6 + d.u * (o.w - 12)).toFixed(1));
+        d.c.setAttribute('cy', (o.yb - 4 - d.v * Math.max(h - 8, 0)).toFixed(1));
+      });
+    },
+    dotsOp(x) { dg.setAttribute('opacity', x); },
+    top() { return o.yb - v.level * o.ppm; }
+  };
+  v.set(0, 1);
+  return v;
+}
+
+/* ---------- Solution A scene ---------- */
+function sceneA(svg) {
+  svg.innerHTML = '';
+  const bal = S('g', null, svg);
+  S('rect', { x: 24, y: 226, width: 176, height: 46, rx: 8, class: 's-body' }, bal);
+  S('rect', { x: 42, y: 236, width: 94, height: 26, rx: 4, class: 's-screen' }, bal);
+  const read = S('text', { x: 128, y: 255, 'text-anchor': 'end', class: 's-read' }, bal);
+  const tare = S('circle', { cx: 170, cy: 249, r: 7, class: 's-tare' }, bal);
+  S('rect', { x: 58, y: 212, width: 116, height: 9, rx: 4, class: 's-pan' }, bal);
+  S('path', { d: 'M74 212 L82 192 H150 L158 212 Z', class: 's-boat' }, bal);
+  const pow = S('path', { d: 'M84 192 Q116 156 148 192 Z', class: 's-powder' }, bal);
+  S('text', { x: 112, y: 296, 'text-anchor': 'middle', class: 's-lbl' }, svg).textContent = 'balance';
+  S('text', { x: 365, y: 304, 'text-anchor': 'middle', class: 's-lbl' }, svg).textContent = '500 mL container';
+  const V = vessel(svg, { id: 'A', x: 290, w: 150, top: 40, yb: 272, ppm: .38, liq: 's-water', dot: 's-dot-b', n: 36, seed: 7,
+    ticks: [100, 200, 300, 400, 500].map(v => ({ v, l: v === 500 ? '500 mL' : String(v), long: true })) });
+  S('text', { x: 18, y: 28, class: 's-lbl' }, svg).textContent = '● = NaHCO₃ particle (not to scale)';
+  const y500 = 272 - .38 * 500;
+  const mark = S('line', { x1: 288, x2: 442, y1: y500, y2: y500, class: 's-mark', opacity: 0 }, svg);
+  const nozzle = S('g', { opacity: 1 }, svg);
+  S('path', { d: 'M349 8 H383 L375 34 H357 Z', class: 's-glass s-nozzle' }, nozzle);
+  const nt = S('text', { x: 366, y: 24, 'text-anchor': 'middle', class: 's-lbl' }, nozzle); nt.textContent = 'water'; nt.style.fontSize = '9px';
+  const stream = S('rect', { x: 364, y: 34, width: 4, height: 0, class: 's-water', opacity: 0 }, svg);
+  const grains = Array.from({ length: 14 }, (_, i) => ({ el: S('circle', { r: 2.6, class: 's-grain', opacity: 0 }, svg), x0: 92 + (i % 7) * 9, y0: 188, x1: 318 + ((i * 37) % 100), y1: 262 - (i % 3) * 5 }));
+  const rod = S('line', { x1: 402, y1: 16, x2: 365, y2: 252, class: 's-rod', opacity: 0 }, svg);
+  const stirRod = a => rod.setAttribute('x2', (365 + 28 * Math.cos(a)).toFixed(1));
+  const tag = S('g', { opacity: 0 }, svg);
+  S('rect', { x: 304, y: 150, width: 122, height: 70, rx: 6, class: 's-tag' }, tag);
+  S('text', { x: 365, y: 178, class: 's-tag-a' }, tag).textContent = 'A';
+  S('text', { x: 365, y: 196, class: 's-tag-t' }, tag).textContent = 'NaHCO₃ stock';
+  const tagC = S('text', { x: 365, y: 212, class: 's-tag-t' }, tag); tagC.textContent = 'C = ? mol/L';
+  api.tagA = () => { tagC.textContent = solved('A3') ? 'C = ' + sig(C_ST, 3) + ' mol/L' : 'C = ? mol/L'; };
+
+  const setRead = x => { read.textContent = x.toFixed(2) + ' g'; };
+  const setPow = k => { pow.style.transform = 'scaleY(' + k + ')'; };
+  const upStream = () => stream.setAttribute('height', Math.max(0, V.top() - 34).toFixed(1));
+  const base = () => {
+    stream.setAttribute('opacity', 0); rod.setAttribute('opacity', 0); mark.setAttribute('opacity', 0);
+    tag.setAttribute('opacity', 0); tag.style.transform = ''; svg.classList.remove('stir');
+    grains.forEach(g => g.el.setAttribute('opacity', 0));
+  };
+  async function enter(i, alive, fast) {
+    const T = ms => fast ? 0 : ms;
+    base();
+    if (i === 0) {
+      V.set(0); V.dotsOp(0); setPow(0); setRead(0);
+      if (!fast) { tare.style.fill = 'var(--ok)'; await sleep(350); tare.style.fill = ''; if (!alive()) return; }
+      await tween(T(1800), k => { setRead(5 * k); setPow(k); }, alive);
+      if (alive()) { setRead(5); setPow(1); }
+      return;
+    }
+    if (i === 1) {
+      V.set(0); V.dotsOp(0); setPow(1); setRead(5);
+      grains.forEach(g => { g.el.setAttribute('opacity', 1); g.el.setAttribute('cx', g.x0); g.el.setAttribute('cy', g.y0); });
+      await tween(T(1300), k => {
+        grains.forEach((g, j) => { const kk = clamp(k * 1.5 - j * .05, 0, 1); g.el.setAttribute('cx', lerp(g.x0, g.x1, kk).toFixed(1)); g.el.setAttribute('cy', (lerp(g.y0, g.y1, kk) - 50 * Math.sin(Math.PI * kk)).toFixed(1)); });
+        setPow(1 - k); setRead(5 * (1 - k));
+      }, alive);
+      if (!alive()) return;
+      stream.setAttribute('opacity', 1);
+      await tween(T(2300), k => { V.set(400 * k); upStream(); }, alive);
+      if (!alive()) return;
+      stream.setAttribute('opacity', 0); rod.setAttribute('opacity', 1); svg.classList.add('stir');
+      await tween(T(1700), k => { stirRod(k * Math.PI * 8); grains.forEach(g => g.el.setAttribute('opacity', 1 - k)); V.dotsOp(k); }, alive);
+      if (alive()) { rod.setAttribute('opacity', 0); svg.classList.remove('stir'); V.dotsOp(1); }
+      return;
+    }
+    if (i === 2) {
+      V.set(400); V.dotsOp(1); setPow(0); setRead(0);
+      stream.setAttribute('opacity', 1);
+      await tween(T(2100), k => { V.set(lerp(400, 500, k)); upStream(); }, alive);
+      if (!alive()) return;
+      stream.setAttribute('opacity', 0); mark.setAttribute('opacity', 1);
+      return;
+    }
+    V.set(500); V.dotsOp(1); setPow(0); setRead(0);
+    rod.setAttribute('opacity', 1); svg.classList.add('stir');
+    await tween(T(1900), k => stirRod(k * Math.PI * 10), alive);
+    if (!alive()) return;
+    rod.setAttribute('opacity', 0); svg.classList.remove('stir');
+    api.tagA(); tag.setAttribute('opacity', 1);
+    await tween(T(650), k => { tag.style.transform = 'translateY(' + (-30 * (1 - k)).toFixed(1) + 'px)'; }, alive);
+  }
+  return { enter };
+}
+
+/* ---------- Solution B scene ---------- */
+function sceneB(svg) {
+  svg.innerHTML = '';
+  const cyl = vessel(svg, { id: 'B1', x: 72, w: 34, top: 58, yb: 264, ppm: 17, liq: 's-vin', dot: 's-dot-r', dr: 2.1, n: 24, seed: 3,
+    ticks: Array.from({ length: 10 }, (_, i) => ({ v: i + 1, l: (i + 1 === 5 || i + 1 === 10) ? String(i + 1) : '', long: (i + 1) % 5 === 0 })) });
+  const bk = vessel(svg, { id: 'B2', x: 262, w: 170, top: 34, yb: 272, ppm: 3.8, liq: 's-vin', dot: 's-dot-r', dr: 2.4, n: 24, seed: 11,
+    ticks: [10, 20, 30, 40, 50].map(v => ({ v, l: v === 50 ? '50 mL' : String(v), long: true })) });
+  S('text', { x: 89, y: 292, 'text-anchor': 'middle', class: 's-lbl' }, svg).textContent = '10 mL cylinder';
+  S('text', { x: 347, y: 300, 'text-anchor': 'middle', class: 's-lbl' }, svg).textContent = 'beaker';
+  S('circle', { cx: 20, cy: 311, r: 3.4, class: 's-dot-r' }, svg);
+  S('text', { x: 30, y: 315, class: 's-lbl' }, svg).textContent = '= acetic acid particle (not to scale)';
+  const y5 = 264 - 5 * 17;
+  const mark5 = S('g', { opacity: 0 }, svg);
+  S('line', { x1: 60, x2: 118, y1: y5, y2: y5, class: 's-mark' }, mark5);
+  S('text', { x: 122, y: y5 + 4, class: 's-lbl b' }, mark5).textContent = '5 mL';
+  const nz1 = S('g', { opacity: 0 }, svg);
+  S('path', { d: 'M74 6 H104 L98 32 H80 Z', class: 's-glass s-nozzle' }, nz1);
+  const t1 = S('text', { x: 89, y: 22, 'text-anchor': 'middle', class: 's-lbl' }, nz1); t1.textContent = 'vinegar'; t1.style.fontSize = '9px';
+  const nz2 = S('g', { opacity: 0 }, svg);
+  S('path', { d: 'M332 6 H362 L356 32 H338 Z', class: 's-glass s-nozzle' }, nz2);
+  const t2 = S('text', { x: 347, y: 22, 'text-anchor': 'middle', class: 's-lbl' }, nz2); t2.textContent = 'water'; t2.style.fontSize = '9px';
+  const stream1 = S('rect', { x: 87, y: 32, width: 4, height: 0, class: 's-vin', opacity: 0 }, svg);
+  const stream2 = S('rect', { x: 345, y: 32, width: 4, height: 0, class: 's-vin', opacity: 0 }, svg);
+  const arc = S('path', { d: 'M89 50 C89 -6 347 -6 347 34', class: 's-vinline', opacity: 0 }, svg);
+  let L = 520; try { L = arc.getTotalLength(); } catch (e) { /* jsdom */ }
+  arc.style.strokeDasharray = L; arc.style.strokeDashoffset = L;
+  const badge = S('g', { opacity: 0 }, svg);
+  badge.style.transformOrigin = '168px 153px';
+  S('rect', { x: 118, y: 132, width: 100, height: 42, rx: 8, class: 's-badge' }, badge);
+  const badgeT = S('text', { x: 168, y: 161, class: 's-badge-t' }, badge); badgeT.textContent = solved('B1') ? '÷ 10' : '÷ ?';
+  api.badgeB = () => { badgeT.textContent = '÷ 10'; };
+  const rod = S('line', { x1: 410, y1: 14, x2: 347, y2: 252, class: 's-rod', opacity: 0 }, svg);
+  const stirRod = a => rod.setAttribute('x2', (347 + 34 * Math.cos(a)).toFixed(1));
+  const tag = S('g', { opacity: 0 }, svg);
+  S('rect', { x: 276, y: 140, width: 142, height: 72, rx: 6, class: 's-tag' }, tag);
+  S('text', { x: 347, y: 168, class: 's-tag-a' }, tag).textContent = 'B';
+  S('text', { x: 347, y: 187, class: 's-tag-t' }, tag).textContent = 'vinegar';
+  S('text', { x: 347, y: 204, class: 's-tag-t' }, tag).textContent = '10-fold diluted';
+
+  const opac = v => Math.min(1, .14 + .86 * Math.pow(5 / Math.max(v, 5), .85));
+  const upS1 = () => stream1.setAttribute('height', Math.max(0, cyl.top() - 32).toFixed(1));
+  const upS2 = () => stream2.setAttribute('height', Math.max(0, bk.top() - 32).toFixed(1));
+  const base = keepBadge => {
+    [stream1, stream2, mark5, tag, rod, arc, nz1, nz2].forEach(e => e.setAttribute('opacity', 0));
+    badge.setAttribute('opacity', keepBadge ? 1 : 0); badge.style.transform = '';
+    tag.style.transform = ''; svg.classList.remove('stir');
+    arc.style.strokeDashoffset = L;
+  };
+  async function enter(i, alive, fast) {
+    const T = ms => fast ? 0 : ms;
+    if (i === 0) {
+      base(); cyl.set(0, 1); cyl.dotsOp(0); bk.set(0, 1); bk.dotsOp(0);
+      nz1.setAttribute('opacity', 1); stream1.setAttribute('opacity', 1);
+      await tween(T(1500), k => { cyl.set(5 * k); cyl.dotsOp(k); upS1(); }, alive);
+      if (!alive()) return;
+      stream1.setAttribute('opacity', 0); nz1.setAttribute('opacity', 0); mark5.setAttribute('opacity', 1);
+      return;
+    }
+    if (i === 1) {
+      base(); cyl.set(5, 1); cyl.dotsOp(1); bk.set(0, 1); bk.dotsOp(0); mark5.setAttribute('opacity', 1);
+      stream2.setAttribute('class', 's-vin');
+      arc.setAttribute('opacity', 1);
+      await tween(T(450), k => { arc.style.strokeDashoffset = L * (1 - k); }, alive);
+      if (!alive()) return;
+      stream2.setAttribute('opacity', 1);
+      await tween(T(1500), k => { cyl.set(5 * (1 - k)); cyl.dotsOp(1 - k); bk.set(5 * k, 1); bk.dotsOp(k); upS2(); }, alive);
+      if (!alive()) return;
+      stream2.setAttribute('opacity', 0); arc.setAttribute('opacity', 0); mark5.setAttribute('opacity', 0);
+      nz2.setAttribute('opacity', 1); stream2.setAttribute('class', 's-water'); stream2.setAttribute('opacity', 1);
+      await tween(T(2600), k => { const v = lerp(5, 50, k); bk.set(v, opac(v)); upS2(); }, alive);
+      if (!alive()) return;
+      stream2.setAttribute('opacity', 0); nz2.setAttribute('opacity', 0); badge.setAttribute('opacity', 1);
+      await tween(T(450), k => { badge.style.transform = 'scale(' + (.6 + .4 * k).toFixed(3) + ')'; }, alive);
+      return;
+    }
+    base(true); cyl.set(0, 1); cyl.dotsOp(0); bk.set(50, opac(50)); bk.dotsOp(1);
+    rod.setAttribute('opacity', 1); svg.classList.add('stir');
+    await tween(T(1800), k => stirRod(k * Math.PI * 10), alive);
+    if (!alive()) return;
+    rod.setAttribute('opacity', 0); svg.classList.remove('stir');
+    tag.setAttribute('opacity', 1);
+    await tween(T(650), k => { tag.style.transform = 'translateY(' + (-30 * (1 - k)).toFixed(1) + 'px)'; }, alive);
+  }
+  return { enter };
+}
+
+function makeStepper(id, steps, scene) {
+  const root = $('#' + id), list = $('.steps', root), cap = $('.cap', root), ctl = $('.st-ctl', root);
+  let cur = 0, tok = 0, playing = false;
+  const items = steps.map((s, i) => {
+    const li = H('li', 'step');
+    li.innerHTML = '<button type="button"><span class="step-n">' + (i + 1) + '</span><span class="step-t"><b>' + s.t + '</b><small>' + s.d + '</small></span></button>';
+    $('button', li).addEventListener('click', () => { stop(); go(i); });
+    list.appendChild(li);
+    return li;
+  });
+  const bBack = H('button', 'btn', '◀ Back'), bNext = H('button', 'btn primary', 'Next step ▶'),
+        bRep = H('button', 'btn', '↻ Replay'), bAuto = H('button', 'btn ghost', '▶ Play all');
+  [bBack, bNext, bRep, bAuto].forEach(b => { b.type = 'button'; ctl.appendChild(b); });
+  function paint() {
+    items.forEach((li, i) => { li.classList.toggle('on', i === cur); $('button', li).setAttribute('aria-current', i === cur ? 'step' : 'false'); });
+    cap.textContent = steps[cur].c;
+    bBack.disabled = cur === 0; bNext.disabled = cur === steps.length - 1;
+  }
+  async function go(i, fast) {
+    cur = clamp(i, 0, steps.length - 1);
+    const my = ++tok;
+    paint();
+    await scene.enter(cur, () => my === tok, !!fast);
+  }
+  function stop() { if (playing) { playing = false; bAuto.textContent = '▶ Play all'; } }
+  bBack.onclick = () => { stop(); go(cur - 1); };
+  bNext.onclick = () => { stop(); go(cur + 1); };
+  bRep.onclick = () => { stop(); go(cur); };
+  bAuto.onclick = async () => {
+    if (playing) { stop(); return; }
+    playing = true; bAuto.textContent = '❚❚ Stop';
+    for (let i = 0; i < steps.length && playing; i++) { await go(i); if (!playing) break; await sleep(900); }
+    stop();
+  };
+  go(0, true);
+  return { go };
+}
+
+const stepsA = [
+  { t: 'Weigh 5 g of sodium bicarbonate (NaHCO<sub>3</sub>).', d: 'Put a weighing boat on the balance and press tare. Add powder until the display reads 5.00 g.', c: 'The balance reads 5.00 g of NaHCO₃.' },
+  { t: 'Dissolve it in about 400 mL of water.', d: 'Tip the powder into the container, add roughly 400 mL of water and stir until no grains are left.', c: 'About 400 mL of water. The powder has dissolved into separate particles.' },
+  { t: 'Add water to reach 500 mL.', d: 'Add water slowly until the curved surface sits on the 500 mL line. Read the line at eye level.', c: 'Surface level with the 500 mL mark. Same particles, more volume.' },
+  { t: 'Mix thoroughly and label the bottle.', d: 'Stir until the liquid is uniform. Label it with the name, the letter A and the concentration you calculated.', c: 'Solution A is mixed and labelled. All teams share it.' }
+];
+const stepsB = [
+  { t: 'Measure 5 mL of vinegar.', d: 'Use a measuring cylinder or syringe. Read the level at eye level.', c: '5 mL of vinegar in the cylinder.' },
+  { t: 'Add 45 mL of water.', d: 'Pour the vinegar into a beaker, then add water until the total is 50 mL.', c: '5 mL vinegar + 45 mL water = 50 mL. The same acid particles now fill ten times the volume.' },
+  { t: 'Mix and label.', d: 'Stir well. Label it “10-fold diluted vinegar”.', c: 'Solution B is mixed and labelled.' }
+];
+
+api.werr = () => {
+  const f = $('#werr'); f.hidden = false;
+  requestAnimationFrame(() => requestAnimationFrame(() => $$('.bar-fill', f).forEach(b => { b.style.width = b.dataset.w + '%'; })));
+};
+
+/* ================= small shared widgets ================= */
+function mcq(host, o) {
+  host.innerHTML = '<h4>' + o.q + '</h4><div class="ideas" role="radiogroup" aria-label="' + (o.label || 'Choices') + '"></div><div class="sim-ctl"><button class="btn primary" type="button">Check</button></div><p class="fb" role="status" aria-live="polite"></p>';
+  const box = $('.ideas', host), name = 'mcq' + Math.random().toString(36).slice(2, 7), fb = $('.fb', host);
+  o.opts.forEach((t, i) => { const l = H('label', 'idea'); l.innerHTML = '<input type="radio" name="' + name + '" value="' + i + '"><span>' + t + '</span>'; box.appendChild(l); });
+  $('button', host).addEventListener('click', () => {
+    const sel = host.querySelector('input:checked');
+    if (!sel) { fb.className = 'fb warn'; fb.textContent = 'Pick an answer first.'; return; }
+    const ok = +sel.value === o.correct;
+    o.state.ok = ok; o.state.tries = (o.state.tries || 0) + 1;
+    fb.className = 'fb ' + (ok ? 'ok' : 'warn');
+    fb.innerHTML = ok ? '<b>Yes.</b> ' + o.why : '<b>Not quite.</b> ' + o.hint;
+  });
+}
+
+/* ================= Activity 2: litmus ================= */
+const LIQ = [
+  { k: 'vin', name: 'Diluted vinegar', cls: 's-vin', x: 95 },
+  { k: 'soda', name: 'Baking soda stock', cls: 's-soda', x: 260 },
+  { k: 'water', name: 'Water', cls: 's-water', x: 425 }
+];
+const REF = {
+  vin: { red: { res: 'none', rgb: [186, 38, 34], txt: 'no change' }, blue: { res: 'red', rgb: [214, 58, 52], txt: 'turns red' }, type: 'acid' },
+  soda: { red: { res: 'blue', rgb: [96, 80, 188], txt: 'turns blue (faint, purplish)' }, blue: { res: 'none', rgb: [38, 72, 186], txt: 'no change' }, type: 'base' },
+  water: { red: { res: 'none', rgb: [186, 38, 34], txt: 'no change' }, blue: { res: 'none', rgb: [38, 72, 186], txt: 'no change' }, type: 'neutral' }
+};
+const lit = { done: false, right: 0, total: 9 };
+const litQ = {};
+
+function sceneL(svg) {
+  svg.innerHTML = '';
+  const strips = {};
+  LIQ.forEach(c => {
+    const id = 'cl' + c.k, cx = c.x;
+    const cp = S('clipPath', { id }, svg);
+    S('path', { d: 'M' + (cx - 48) + ' 168 L' + (cx + 48) + ' 168 L' + (cx + 38) + ' 252 L' + (cx - 38) + ' 252 Z' }, cp);
+    S('rect', { x: cx - 50, y: 198, width: 100, height: 60, class: c.cls, 'clip-path': 'url(#' + id + ')' }, svg);
+    S('path', { d: 'M' + (cx - 48) + ' 168 L' + (cx - 38) + ' 250 Q' + (cx - 37) + ' 256 ' + (cx - 30) + ' 256 H' + (cx + 30) + ' Q' + (cx + 37) + ' 256 ' + (cx + 38) + ' 250 L' + (cx + 48) + ' 168', class: 's-glass' }, svg);
+    S('text', { x: cx, y: 284, 'text-anchor': 'middle', class: 's-lbl b' }, svg).textContent = c.name;
+    strips[c.k] = {};
+    ['red', 'blue'].forEach((p, pi) => {
+      const sx = cx + (pi ? 10 : -44), scx = sx + 17;
+      S('rect', { x: sx, y: 30, width: 34, height: 96, rx: 3, class: p === 'red' ? 's-strip-r' : 's-strip-b' }, svg);
+      const spot = S('circle', { cx: scx, cy: 96, r: 0, stroke: 'rgba(0,0,0,.25)', 'stroke-width': 1.5 }, svg);
+      const drop = S('path', { d: 'M0 -9 C-6 0 -8 4 -8 7 a8 8 0 0 0 16 0 C8 4 6 0 0 -9Z', class: c.cls, opacity: 0 }, svg);
+      drop.setAttribute('transform', 'translate(' + scx + ' 6)');
+      const lab = S('text', { x: scx, y: 144, 'text-anchor': 'middle', class: 's-lbl' }, svg);
+      strips[c.k][p] = { spot, drop, lab, scx, base: p === 'red' ? RGB.red : RGB.blue };
+    });
+  });
+  function reset() {
+    Object.keys(strips).forEach(k => ['red', 'blue'].forEach(p => {
+      const s = strips[k][p]; s.spot.setAttribute('r', 0); s.drop.setAttribute('opacity', 0); s.lab.textContent = '';
+    }));
+  }
+  async function dropOn(k, p, delay, alive) {
+    const s = strips[k][p], tgt = REF[k][p];
+    await sleep(delay); if (!alive()) return;
+    s.drop.setAttribute('opacity', 1);
+    await tween(380, q => s.drop.setAttribute('transform', 'translate(' + s.scx + ' ' + lerp(6, 92, q).toFixed(1) + ')'), alive);
+    s.drop.setAttribute('opacity', 0);
+    const startArr = s.base.map(v => Math.round(lerp(v, 0, .14)));
+    s.spot.style.fill = mixRGB(startArr, startArr, 0);
+    await tween(320, q => s.spot.setAttribute('r', (13 * q).toFixed(1)), alive);
+    await tween(900, q => { s.spot.style.fill = mixRGB(startArr, tgt.rgb, q); }, alive);
+    s.lab.textContent = tgt.res === 'none' ? 'no change' : 'turns ' + tgt.res;
+  }
+  async function run(alive) {
+    reset();
+    const jobs = [];
+    LIQ.forEach((c, ci) => ['red', 'blue'].forEach((p, pi) => jobs.push(dropOn(c.k, p, (ci * 2 + pi) * 220, alive))));
+    await Promise.all(jobs);
+  }
+  return { run, reset };
+}
+
+function buildLit() {
+  const tb = $('#litTable tbody');
+  const oP = '<option value="">choose…</option><option value="none">no change</option><option value="blue">turns blue</option><option value="red">turns red</option>';
+  const oT = '<option value="">choose…</option><option value="acid">acid</option><option value="base">base</option><option value="neutral">neutral</option>';
+  LIQ.forEach(c => {
+    const tr = H('tr'); tr.dataset.k = c.k;
+    tr.innerHTML = '<th scope="row"><span class="dotk ' + c.k + '"></span>' + c.name + '</th>' +
+      '<td><select id="p-' + c.k + '-red" data-p="red" aria-label="Red litmus with ' + c.name + '">' + oP + '</select><span class="res"></span></td>' +
+      '<td><select id="p-' + c.k + '-blue" data-p="blue" aria-label="Blue litmus with ' + c.name + '">' + oP + '</select><span class="res"></span></td>' +
+      '<td><select id="p-' + c.k + '-type" data-p="type" aria-label="Is ' + c.name + ' an acid, a base or neutral">' + oT + '</select><span class="res"></span></td>';
+    tb.appendChild(tr);
+  });
+  const sels = $$('#litTable select'), run = $('#litRun'), fb = $('#litFb'), cap = $('#litCap');
+  const L = sceneL($('#svgL'));
+  sels.forEach(s => s.addEventListener('change', () => { run.disabled = lit.done || !sels.every(x => x.value); }));
+  let running = false;
+  run.addEventListener('click', async () => {
+    if (running || lit.done) return;
+    running = true; run.disabled = true; cap.textContent = 'One drop on each strip…';
+    await L.run(() => true);
+    let right = 0;
+    LIQ.forEach(c => {
+      const tr = $('tr[data-k="' + c.k + '"]');
+      ['red', 'blue', 'type'].forEach(p => {
+        const sel = $('select[data-p="' + p + '"]', tr), res = sel.parentNode.querySelector('.res');
+        const exp = p === 'type' ? REF[c.k].type : REF[c.k][p].res;
+        const txt = p === 'type' ? exp : REF[c.k][p].txt;
+        const ok = sel.value === exp;
+        if (ok) right++;
+        res.className = 'res ' + (ok ? 'ok' : 'warn');
+        res.textContent = ok ? '✓ ' + txt : '✗ reference: ' + txt;
+        sel.disabled = true;
+      });
+    });
+    lit.done = true; lit.right = right; running = false;
+    cap.textContent = 'Reference result. Compare it with what you see on your own strips.';
+    fb.className = 'fb ' + (right === 9 ? 'ok' : 'warn');
+    fb.innerHTML = '<b>' + right + ' of 9 matched.</b> ' + (right === 9 ? 'Nice. ' : 'Check the cells marked ✗. ') +
+      'Diluted vinegar is about pH 3, water about pH 7 and the baking soda stock about pH 8. Write anything different from your bench in the notes box.';
+  });
+  $('#litReset').addEventListener('click', () => {
+    if (running) return;
+    sels.forEach(s => { s.disabled = false; s.value = ''; s.parentNode.querySelector('.res').textContent = ''; });
+    L.reset(); lit.done = false; lit.right = 0; run.disabled = true; fb.className = 'fb'; fb.textContent = '';
+    cap.textContent = 'Pick a prediction for every cell, then run the test.';
+  });
+  mcq($('#litMcq'), {
+    q: 'The baking soda stock turned red litmus only a faint, purplish blue. What is the best explanation?',
+    label: 'Explanation choices', state: litQ, correct: 0,
+    opts: ['Baking soda is a weak base, so the solution is only mildly basic (pH about 8).', 'The litmus paper was too old to work.', 'Baking soda is neutral, so nothing should happen.', 'The solution was too concentrated.'],
+    why: 'A weak base gives a mild colour change. Litmus needs a clearly basic solution for a deep blue.',
+    hint: 'Think about how strong this base is. Baking soda is gentle compared with drain cleaner.'
+  });
+}
+
+/* ================= Activity 3A: equation and pairing ================= */
+function sceneR(svg) {
+  svg.innerHTML = '';
+  const rows = [];
+  for (let i = 0; i < 5; i++) {
+    const y = 24 + i * 27, ax = 78 + (i % 2) * 16, bx = 442 - (i % 2) * 16;
+    rows.push({ y, ax, bx, a: S('circle', { cx: ax, cy: y, r: 8, class: 's-dot-r' }, svg), b: S('circle', { cx: bx, cy: y, r: 8, class: 's-dot-b' }, svg) });
+  }
+  S('text', { x: 86, y: 178, 'text-anchor': 'middle', class: 's-lbl b' }, svg).textContent = 'CH₃COOH (acid)';
+  S('text', { x: 434, y: 178, 'text-anchor': 'middle', class: 's-lbl b' }, svg).textContent = 'NaHCO₃ (base)';
+  const out = S('g', null, svg);
+  const note = S('text', { x: 260, y: 178, 'text-anchor': 'middle', class: 's-lbl b' }, svg);
+  let tok = 0;
+  function reset() {
+    tok++; out.innerHTML = ''; note.textContent = '';
+    rows.forEach(r => { r.a.setAttribute('cx', r.ax); r.b.setAttribute('cx', r.bx); r.a.setAttribute('opacity', 1); r.b.setAttribute('opacity', 1); });
+  }
+  async function one(r, delay, alive) {
+    await sleep(delay); if (!alive()) return;
+    await tween(900, k => { r.a.setAttribute('cx', lerp(r.ax, 252, k).toFixed(1)); r.b.setAttribute('cx', lerp(r.bx, 268, k).toFixed(1)); }, alive);
+    if (!alive()) return;
+    r.a.setAttribute('opacity', 0); r.b.setAttribute('opacity', 0);
+    S('circle', { cx: 260, cy: r.y, r: 10, class: 's-dot-m' }, out);
+    const co2 = S('circle', { cx: 290, cy: r.y, r: 5, class: 's-co2' }, out);
+    await tween(1300, k => { co2.setAttribute('cy', (r.y - k * (r.y + 14)).toFixed(1)); co2.setAttribute('opacity', (1 - k * .9).toFixed(2)); }, alive);
+    co2.remove();
+  }
+  async function play() {
+    reset(); const my = tok, alive = () => my === tok;
+    await Promise.all(rows.map((r, i) => one(r, i * 260, alive)));
+    if (alive()) note.textContent = 'CH₃COONa (salt) + H₂O stay in the cup. CO₂ escapes.';
+  }
+  return { play, reset };
+}
+
+function buildEq() {
+  const R = sceneR($('#svgR'));
+  const fb = $('#eqFb');
+  let tries = 0;
+  const rp = H('button', 'btn ghost', '↻ Replay particles'); rp.type = 'button'; rp.style.justifySelf = 'start';
+  $('#svgR').closest('figure').after(rp);
+  rp.addEventListener('click', () => R.play());
+  $('#eqCheck').addEventListener('click', () => {
+    const a = $('#eq1').value, b = $('#eq2').value;
+    if (!a || !b) { fb.className = 'fb warn'; fb.textContent = 'Choose both products first.'; return; }
+    if (a === 'ace' && b === 'co2') {
+      QT.EQ.solved = true; fb.className = 'fb ok';
+      fb.innerHTML = '<b>Correct.</b> CH<sub>3</sub>COOH + NaHCO<sub>3</sub> → CH<sub>3</sub>COONa + H<sub>2</sub>O + CO<sub>2</sub>. One acid particle reacts with one bicarbonate particle, so the mole ratio is 1 : 1. The bubbles are carbon dioxide.';
+      R.play(); hooks.forEach(h => h('EQ')); refreshLocks();
+      return;
+    }
+    tries++;
+    let m = a !== 'ace'
+      ? (a === 'naoh' ? 'Vinegar and baking soda do not make NaOH. Look for the sodium salt of acetic acid.' : a === 'carb' ? 'Na₂CO₃ needs two sodium atoms, but one bicarbonate brings only one.' : 'CH₃COOH is the acid you started with, not a product.')
+      : 'The salt is right. Now think about the gas: it contains carbon and oxygen.';
+    if (tries >= 3) m += ' Hint: sodium acetate and carbon dioxide.';
+    fb.className = 'fb warn'; fb.innerHTML = '<b>Not yet.</b> ' + m;
+  });
+}
+
+/* ================= Activity 3C: the cup ================= */
+const sim = { V: 0, busy: false, tok: 0, log: {} };
+const tState = {};
+let simApi = null;
+
+function buildSim() {
+  const svg = $('#svgC'); svg.innerHTML = '';
+  const yB = 256, ppm = 5.2, rx0 = 64, rpx = 28, ry = 312;
+  const cp = S('clipPath', { id: 'cpC' }, svg);
+  S('polygon', { points: '196,90 324,90 306,258 214,258' }, cp);
+  const liq = S('rect', { x: 186, y: yB, width: 148, height: 0, class: 's-vin', 'clip-path': 'url(#cpC)' }, svg);
+  const bubL = S('g', { 'clip-path': 'url(#cpC)' }, svg);
+  const foamL = S('g', null, svg);
+  S('path', { d: 'M190 94 H330 M196 96 L214 256 Q215 258 218 258 H302 Q305 258 306 256 L324 96', class: 's-glass' }, svg);
+  const rod = S('line', { x1: 322, y1: 56, x2: 262, y2: 248, class: 's-rod', opacity: 0 }, svg);
+  const stirRod = a => rod.setAttribute('x2', (262 + 22 * Math.cos(a)).toFixed(1));
+  const stream = S('rect', { x: 259, y: 90, width: 2.5, height: 0, class: 's-soda', opacity: 0 }, svg);
+  const syr = S('g', null, svg);
+  S('rect', { x: 249, y: 18, width: 22, height: 62, rx: 3, class: 's-body' }, syr);
+  const syrLiq = S('rect', { x: 251, y: 20, width: 18, height: 58, class: 's-soda' }, syr);
+  S('rect', { x: 258, y: 78, width: 4, height: 12, class: 's-pan' }, syr);
+  const plunger = S('g', null, syr);
+  S('rect', { x: 258, y: 2, width: 4, height: 18, class: 's-pan' }, plunger);
+  S('rect', { x: 249, y: 0, width: 22, height: 4, rx: 2, class: 's-pan' }, plunger);
+  S('text', { x: 280, y: 52, class: 's-lbl' }, syr).textContent = '1 mL of stock';
+  S('text', { x: 58, y: 140, class: 's-lbl b' }, svg).textContent = 'diluted';
+  S('text', { x: 58, y: 156, class: 's-lbl b' }, svg).textContent = 'vinegar';
+  /* litmus dock */
+  const dock = {};
+  [['red', 372, 's-strip-r', RGB.red], ['blue', 424, 's-strip-b', RGB.blue]].forEach(([p, x, cls, base]) => {
+    S('rect', { x, y: 56, width: 30, height: 92, rx: 3, class: cls }, svg);
+    const spot = S('circle', { cx: x + 15, cy: 120, r: 0, stroke: 'rgba(0,0,0,.25)', 'stroke-width': 1.5 }, svg);
+    const drop = S('path', { d: 'M0 -8 C-5 0 -7 3 -7 6 a7 7 0 0 0 14 0 C7 3 5 0 0 -8Z', class: 's-vin', opacity: 0 }, svg);
+    S('text', { x: x + 15, y: 166, 'text-anchor': 'middle', class: 's-lbl' }, svg).textContent = p;
+    dock[p] = { spot, drop, cx: x + 15, base };
+  });
+  /* ruler, fizz bars, prediction */
+  S('line', { x1: rx0, x2: rx0 + 14 * rpx, y1: ry, y2: ry, class: 's-ruler' }, svg);
+  for (let i = 0; i <= 14; i++) {
+    S('line', { x1: rx0 + i * rpx, x2: rx0 + i * rpx, y1: ry, y2: ry + (i % 2 ? 5 : 8), class: 's-ruler' }, svg);
+    if (i % 2 === 0) S('text', { x: rx0 + i * rpx, y: ry + 22, 'text-anchor': 'middle', class: 's-lbl' }, svg).textContent = i;
+  }
+  S('text', { x: rx0 + 14 * rpx + 8, y: ry + 22, class: 's-lbl' }, svg).textContent = 'mL';
+  S('text', { x: rx0 + 14 * rpx, y: 284, 'text-anchor': 'end', class: 's-lbl' }, svg).textContent = 'bubbling per mL added';
+  const bars = S('g', null, svg);
+  const pred = S('g', { opacity: 0 }, svg);
+  const predLine = S('line', { y1: 276, y2: ry, class: 's-mark' }, pred); predLine.style.stroke = 'var(--ok)';
+  const predTri = S('polygon', { class: 's-pred' }, pred);
+  const predTxt = S('text', { y: 262, class: 's-lbl b' }, pred); predTxt.style.fill = 'var(--ok)';
+  function updatePred() {
+    const x = rx0 + clamp(vEq(), 0, 14) * rpx;
+    predLine.setAttribute('x1', x); predLine.setAttribute('x2', x);
+    predTri.setAttribute('points', (x - 6) + ',266 ' + (x + 6) + ',266 ' + x + ',275');
+    predTxt.setAttribute('x', x); predTxt.setAttribute('text-anchor', x > 380 ? 'end' : x < 130 ? 'start' : 'middle');
+    predTxt.textContent = 'predicted ' + fx(vEq(), 1) + ' mL';
+    pred.setAttribute('opacity', solved('P4') ? 1 : 0);
+  }
+  api.predict = () => { updatePred(); api.chart && api.chart(); };
+
+  const total = V => 10 + V;
+  const setLevel = t => { const h = t * ppm; liq.setAttribute('y', (yB - h).toFixed(2)); liq.setAttribute('height', (h + 4).toFixed(2)); };
+  const setColor = V => { liq.style.fill = 'color-mix(in srgb, var(--liq-vin) ' + Math.round(100 * 10 / (10 + V)) + '%, var(--liq-soda))'; };
+  const syrFill = f => { syrLiq.setAttribute('y', (78 - 58 * f).toFixed(1)); syrLiq.setAttribute('height', (58 * f).toFixed(1)); plunger.style.transform = 'translateY(' + (58 * (1 - f)).toFixed(1) + 'px)'; };
+  const topY = t => yB - t * ppm;
+
+  function fizz(n, t) {
+    if (reduce || n <= 0) return;
+    const top = topY(t);
+    for (let i = 0; i < n; i++) {
+      const c = S('circle', { cx: (222 + Math.random() * 76).toFixed(1), cy: (248 - Math.random() * 8).toFixed(1), r: (1.6 + Math.random() * 2.8).toFixed(1), class: 's-bub' }, bubL);
+      c.style.setProperty('--by', -(248 - top - 8 - Math.random() * 10) + 'px');
+      c.style.setProperty('--bx', ((Math.random() * 2 - 1) * 10).toFixed(1) + 'px');
+      c.style.animationDuration = (.8 + Math.random() * 1.1).toFixed(2) + 's';
+      c.style.animationDelay = (Math.random() * .9).toFixed(2) + 's';
+      c.addEventListener('animationend', () => c.remove());
+    }
+    const xl = 196 + (top - 96) / 160 * 18, xr = 324 - (top - 96) / 160 * 18;
+    for (let i = 0; i < Math.round(n / 2); i++) {
+      const c = S('circle', { cx: (xl + 6 + Math.random() * (xr - xl - 12)).toFixed(1), cy: (top + 1 - Math.random() * 4).toFixed(1), r: (2 + Math.random() * 2.2).toFixed(1), class: 's-foam' }, foamL);
+      c.style.animationDelay = (Math.random() * .8).toFixed(2) + 's';
+      c.addEventListener('animationend', () => c.remove());
+    }
+  }
+
+  const btn = { add: $('#simAdd'), red: $('#simRed'), blue: $('#simBlue') };
+  const upBtns = () => { btn.add.disabled = sim.busy || sim.V >= 14; btn.red.disabled = sim.busy; btn.blue.disabled = sim.busy; };
+  function addRow(V, word) {
+    const tb = $('#logBody');
+    $$('tr', tb).forEach(r => r.classList.remove('cur'));
+    const tr = H('tr', 'cur'); tr.dataset.v = V;
+    tr.innerHTML = '<td class="num">' + V + '</td><td>' + word + '</td><td class="rr">—</td><td class="rb">—</td><td><input class="note" type="text" autocomplete="off" aria-label="Your notes at ' + V + ' mL"></td>';
+    tb.appendChild(tr);
+    return tr;
+  }
+  function hud(V, word) {
+    $('#rdAdded').textContent = 'Added ' + V + ' mL';
+    $('#rdTotal').textContent = 'In cup ' + total(V) + ' mL';
+    $('#rdBub').textContent = 'Bubbling ' + (word || '—');
+  }
+  function resetAll() {
+    sim.tok++; sim.busy = false; sim.V = 0; sim.log = {};
+    bubL.innerHTML = ''; foamL.innerHTML = ''; bars.innerHTML = '';
+    rod.setAttribute('opacity', 0); stream.setAttribute('opacity', 0); svg.classList.remove('stir');
+    setLevel(10); setColor(0); syrFill(1);
+    ['red', 'blue'].forEach(p => { dock[p].spot.setAttribute('r', 0); dock[p].drop.setAttribute('opacity', 0); });
+    $('#logBody').innerHTML = ''; addRow(0, '—'); sim.log[0] = {};
+    hud(0, null); upBtns(); updatePred();
+    $('#simHint').textContent = 'Add 1 mL at a time. Test red litmus after each addition, or at least every second one.';
+  }
+  async function add() {
+    if (sim.busy || sim.V >= 14) return;
+    sim.busy = true; upBtns();
+    const my = ++sim.tok, alive = () => my === sim.tok;
+    const prev = sim.V, next = prev + 1, f = fizzFrac(prev);
+    stream.setAttribute('opacity', 1);
+    await tween(650, k => { syrFill(1 - k); setLevel(total(prev) + k); setColor(prev + k); stream.setAttribute('height', Math.max(0, topY(total(prev) + k) - 90).toFixed(1)); }, alive);
+    if (!alive()) return;
+    stream.setAttribute('opacity', 0);
+    fizz(Math.round(f * 30), total(next));
+    rod.setAttribute('opacity', 1);
+    await tween(950, k => stirRod(k * Math.PI * 8), alive);
+    if (!alive()) return;
+    rod.setAttribute('opacity', 0);
+    await tween(250, k => syrFill(k), alive);
+    if (!alive()) return;
+    sim.V = next;
+    const word = fizzWord(f);
+    sim.log[next] = { fizz: word, f };
+    S('rect', { x: rx0 + (next - .5) * rpx - 10, y: ry - Math.max(2, f * 24), width: 20, height: Math.max(2, f * 24), rx: 2, class: 's-fizzbar' }, bars);
+    addRow(next, word); hud(next, word);
+    sim.busy = false; upBtns();
+    if (next >= 14) $('#simHint').textContent = 'That is 14 mL, the end of the ruler. Reset the cup to run it again.';
+  }
+  async function test(p) {
+    if (sim.busy) return;
+    sim.busy = true; upBtns();
+    const my = ++sim.tok, alive = () => my === sim.tok;
+    const V = sim.V, pH = phAt(V), res = p === 'red' ? redPaper(pH) : bluePaper(pH), d = dock[p];
+    const x0 = 300, y0 = topY(total(V)), x1 = d.cx, y1 = 112;
+    d.spot.setAttribute('r', 0);
+    d.drop.style.fill = liq.style.fill; d.drop.setAttribute('opacity', 1);
+    await tween(700, k => d.drop.setAttribute('transform', 'translate(' + lerp(x0, x1, k).toFixed(1) + ' ' + (lerp(y0, y1, k) - 60 * Math.sin(Math.PI * k)).toFixed(1) + ')'), alive);
+    if (!alive()) return;
+    d.drop.setAttribute('opacity', 0);
+    const start = mixRGB(d.base, [0, 0, 0], .14), startArr = d.base.map(v => Math.round(lerp(v, 0, .14)));
+    d.spot.style.fill = start;
+    await tween(300, k => d.spot.setAttribute('r', (14 * k).toFixed(1)), alive);
+    const tgt = (p === 'red' ? mixRGB(RGB.red, RGB.blue, res.t) : mixRGB(RGB.blue, RGB.red, res.t)).match(/\d+/g).map(Number);
+    await tween(800, k => { d.spot.style.fill = mixRGB(startArr, tgt, k); }, alive);
+    if (!alive()) return;
+    sim.log[V] = sim.log[V] || {};
+    sim.log[V][p] = res.label;
+    const tr = $('#logBody tr[data-v="' + V + '"]');
+    if (tr) $('.' + (p === 'red' ? 'rr' : 'rb'), tr).innerHTML = '<span class="sw" style="background:' + res.color + '"></span>' + res.label;
+    sim.busy = false; upBtns();
+  }
+  btn.add.addEventListener('click', add);
+  btn.red.addEventListener('click', () => test('red'));
+  btn.blue.addEventListener('click', () => test('blue'));
+  $('#simReset').addEventListener('click', resetAll);
+  resetAll();
+  simApi = { reset: resetAll, updatePred };
+}
+
+/* ================= Activity 3D: percent table ================= */
+function buildT() {
+  const tb = $('#tblT tbody');
+  [2, 4, 6, 8, 10].forEach(v => {
+    const tr = H('tr');
+    tr.innerHTML = '<td class="num">' + v + ' mL</td><td><span class="mini"><input id="t-' + v + '" type="text" inputmode="decimal" autocomplete="off" aria-label="Base added as a percentage of the acid after ' + v + ' mL"><span class="hint">%</span><span class="ico" aria-hidden="true"></span></span></td>';
+    tb.appendChild(tr);
+    const m = $('.mini', tr), inp = $('input', tr), ico = $('.ico', tr);
+    const chk = () => {
+      const x = parseNum(inp.value);
+      if (!isFinite(x)) { m.className = 'mini'; ico.textContent = ''; tState[v] = null; return; }
+      const ok = near(x, v * C_ST / nAcid() * 100, { tol: .03, abs: 1 });
+      m.className = 'mini ' + (ok ? 'ok' : 'warn'); ico.textContent = ok ? '✓' : '✗'; tState[v] = ok;
+      const vals = [2, 4, 6, 8, 10].map(q => tState[q]);
+      const fb = $('#tFb');
+      if (vals.every(Boolean)) {
+        fb.className = 'fb ok';
+        fb.innerHTML = '<b>All five correct.</b> About ' + fx(vEq(), 1) + ' mL gives 100%. Past that the percentage is over 100%, so base is left over: bubbling stops and red litmus turns blue.';
+      } else if (!ok) {
+        fb.className = 'fb warn'; fb.innerHTML = 'Row ' + v + ' mL is not right yet. Base added (mmol) = volume × ' + sig(C_ST, 3) + ', then divide by ' + sig(nAcid(), 3) + ' and multiply by 100.';
+      } else { fb.className = 'fb'; fb.textContent = ''; }
+    };
+    inp.addEventListener('change', chk);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); chk(); } });
+    tr._lock = () => { inp.disabled = !solved('P3'); };
+    tr._reset = () => { inp.value = ''; m.className = 'mini'; ico.textContent = ''; tState[v] = null; };
+  });
+  const lockT = () => $$('#tblT tbody tr').forEach(r => r._lock());
+  hooks.push(lockT); lockT();
+}
+
+/* ================= Activity 4: chart, reasons, reflection ================= */
+function buildChart() {
+  const svg = $('#svgChart'); svg.innerHTML = '';
+  const X0 = 56, X1 = 580, Y0 = 20, Y1 = 250;
+  const xv = v => X0 + v * (X1 - X0) / 14, yp = p => Y1 - (p - 2) * (Y1 - Y0) / 8;
+  S('rect', { x: X0, y: yp(6.5), width: X1 - X0, height: yp(4.5) - yp(6.5), class: 'c-band-a' }, svg);
+  S('rect', { x: X0, y: yp(8.5), width: X1 - X0, height: yp(7.5) - yp(8.5), class: 'c-band-b' }, svg);
+  for (let p = 2; p <= 10; p += 2) {
+    S('line', { x1: X0, x2: X1, y1: yp(p), y2: yp(p), class: 'c-grid' }, svg);
+    S('text', { x: X0 - 8, y: yp(p) + 4, 'text-anchor': 'end', class: 's-lbl' }, svg).textContent = p;
+  }
+  for (let v = 0; v <= 14; v += 2) {
+    S('line', { x1: xv(v), x2: xv(v), y1: Y1, y2: Y1 + 6, class: 'c-axis' }, svg);
+    S('text', { x: xv(v), y: Y1 + 22, 'text-anchor': 'middle', class: 's-lbl' }, svg).textContent = v;
+  }
+  S('line', { x1: X0, x2: X0, y1: Y0, y2: Y1, class: 'c-axis' }, svg);
+  S('line', { x1: X0, x2: X1, y1: Y1, y2: Y1, class: 'c-axis' }, svg);
+  S('text', { x: (X0 + X1) / 2, y: 292, 'text-anchor': 'middle', class: 's-lbl' }, svg).textContent = 'baking soda stock added (mL)';
+  const yl = S('text', { x: 14, y: (Y0 + Y1) / 2, 'text-anchor': 'middle', class: 's-lbl', transform: 'rotate(-90 14 ' + ((Y0 + Y1) / 2) + ')' }, svg); yl.textContent = 'pH (model)';
+  const curve = S('path', { class: 'c-curve' }, svg);
+  const pred = S('line', { y1: Y0, y2: Y1, class: 'c-pred', opacity: 0 }, svg);
+  const cur = S('line', { y1: Y0, y2: Y1, class: 'c-cur' }, svg);
+  const pt = S('circle', { r: 6, class: 'c-pt' }, svg);
+  const slider = $('#scrub');
+  function zones() {
+    let bs = null, be = null, rs = null;
+    for (let i = 0; i <= 280; i++) {
+      const v = i * .05, pH = phAt(v);
+      if (bs === null && bluePaper(pH).t < .9) bs = v;
+      if (be === null && bluePaper(pH).t < .1) be = v;
+      if (rs === null && redPaper(pH).t > .5) rs = v;
+    }
+    return { bs, be, rs };
+  }
+  function update() {
+    const v = +slider.value, pH = phAt(v), rp = redPaper(pH), bp = bluePaper(pH);
+    cur.setAttribute('x1', xv(v)); cur.setAttribute('x2', xv(v));
+    pt.setAttribute('cx', xv(v)); pt.setAttribute('cy', yp(clamp(pH, 2, 10)));
+    $('#scrubOut').textContent = fx(v, 1) + ' mL';
+    $('#swRed').style.background = rp.color; $('#swBlue').style.background = bp.color;
+    $('#swRedT').textContent = rp.label + ' · pH ' + fx(pH, 1);
+    $('#swBlueT').textContent = bp.label + ' · pH ' + fx(pH, 1);
+    const ve = vEq(), z = zones();
+    const state = v < ve - .05 ? 'Acid is still left over, so the mixture is acidic.' : v <= ve + .15 ? 'The acid and base have just cancelled. The mixture is close to neutral, or very slightly basic.' : 'Extra baking soda is left over, so the mixture is basic.';
+    $('#scrubTxt').textContent = state + ' In this model the blue strip changes colour between about ' + fx(z.bs, 1) + ' and ' + fx(z.be, 1) + ' mL, while the red strip changes only at about ' + fx(z.rs, 1) + ' mL. One mixture, two papers, two different answers.';
+  }
+  api.chart = () => {
+    const pts = [];
+    for (let v = 0; v <= 14.001; v += .1) pts.push(xv(v).toFixed(1) + ',' + yp(clamp(phAt(v), 2, 10)).toFixed(1));
+    curve.setAttribute('d', 'M' + pts.join(' L'));
+    pred.setAttribute('x1', xv(vEq())); pred.setAttribute('x2', xv(vEq())); pred.setAttribute('opacity', solved('P4') ? 1 : 0);
+    update();
+  };
+  slider.addEventListener('input', update);
+  api.chart();
+}
+
+const REASONS = [
+  { t: 'Litmus changes colour gradually over a wide pH range, not at one sharp point.', good: true, why: 'The change is spread across several pH units, so there is no single clear moment.' },
+  { t: 'Red and blue litmus change at different points in the same mixture, so they give different “endpoints”.', good: true, why: 'Check the two strips in 4B. They disagree by several millilitres.' },
+  { t: 'Judging a colour by eye is subjective. It depends on drop size, the paper and the lighting.', good: true, why: 'Two people can call the same strip red or purple.' },
+  { t: 'Adding 1 mL portions is too coarse. The true endpoint can sit between two portions.', good: true, why: 'Each 1 mL portion is a large share of the volume you need in total.' },
+  { t: 'Litmus only says “acid” or “base”. It does not show how much acid is left.', good: true, why: 'A titration needs a sharp, measurable signal at the equivalence point.' },
+  { t: 'The baking soda uses up the litmus paper, so the paper stops working.', good: false, why: 'The paper holds an indicator dye. It is not what limits the result.' },
+  { t: 'Vinegar is too weak an acid to react with baking soda.', good: false, why: 'It reacts clearly. The fizz proves it.' },
+  { t: 'The reaction makes no visible change, so nothing can be measured.', good: false, why: 'The fizz is a clear change. The weakness is the colour signal of the paper.' }
+];
+const reasonState = { score: null };
+function buildReasons() {
+  const box = $('#reasons'), fb = $('#reasonFb');
+  REASONS.forEach((r, i) => {
+    const l = H('label', 'reason'); l.innerHTML = '<input type="checkbox" id="rs-' + i + '"><span>' + r.t + '<small></small></span>';
+    box.appendChild(l);
+  });
+  $('#reasonCheck').addEventListener('click', () => {
+    let score = 0;
+    $$('.reason', box).forEach((l, i) => {
+      const r = REASONS[i], on = $('input', l).checked, ok = on === r.good;
+      if (ok) score++;
+      l.classList.toggle('right', ok); l.classList.toggle('wrong', !ok);
+      $('small', l).textContent = (ok ? '✓ ' : '✗ ') + (r.good ? (on ? '' : 'This is a good reason you missed. ') : (on ? 'Not a good reason. ' : '')) + r.why;
+    });
+    reasonState.score = score;
+    fb.className = 'fb ' + (score === REASONS.length ? 'ok' : 'warn');
+    fb.innerHTML = '<b>' + score + ' of ' + REASONS.length + ' judged correctly.</b> ' + (score === REASONS.length ? 'You can now explain the limits of litmus.' : 'Change the ones marked ✗ and check again.');
+  });
+}
+
+const RS = {};
+const REFLECT = {
+  R1: { h: 'In your own words: why does the team take a portion of the shared stock instead of weighing a small mass of its own?',
+    ideas: [() => 'A very small mass (about 0.25 g) has a much larger relative weighing error than 5 g.', () => 'Every team gets exactly the same concentration, so results can be compared fairly.', () => 'One careful preparation saves weighing time and wastes less chemical.'] },
+  R2: { h: 'In your own words: what happened when you added baking soda stock to vinegar? Use the words acid, base, carbon dioxide and neutralise.',
+    ideas: [() => 'Acetic acid and sodium bicarbonate react to give sodium acetate, water and carbon dioxide.', () => 'The bubbles are carbon dioxide gas. They stop when the acid is used up.',
+      () => 'They react 1 : 1 in moles, so the stock volume needed matches the acid amount. Your prediction was about ' + fx(vEq(), 1) + ' mL.'] }
+};
+function buildReflect(host) {
+  const id = host.dataset.reflect, d = REFLECT[id], T = RS[id] = { text: '', hits: null };
+  host.innerHTML = '<h4>' + d.h + '</h4><textarea class="txt" id="rf-' + id + '" aria-label="Your explanation" placeholder="Write 2–3 sentences"></textarea>' +
+    '<div class="sim-ctl"><button class="btn primary" type="button">Compare with the key ideas</button></div><div class="ideas" hidden></div><p class="fb" role="status" aria-live="polite"></p>';
+  const ta = $('textarea', host), ideas = $('.ideas', host), fb = $('.fb', host);
+  ta.addEventListener('input', () => { T.text = ta.value; });
+  const count = () => {
+    const n = $$('input', ideas).filter(c => c.checked).length; T.hits = n;
+    fb.className = 'fb ' + (n === d.ideas.length ? 'ok' : 'warn');
+    fb.innerHTML = '<b>' + n + ' of ' + d.ideas.length + ' key ideas covered.</b> ' + (n === d.ideas.length ? 'Well explained.' : 'Add the missing idea to your answer.');
+  };
+  $('button', host).addEventListener('click', () => {
+    if (ta.value.trim().length < 20) { fb.className = 'fb warn'; fb.textContent = 'Write a few sentences first, then compare.'; return; }
+    ideas.innerHTML = '';
+    d.ideas.forEach(f => { const l = H('label', 'idea'); l.innerHTML = '<input type="checkbox"><span><b>Tick if your answer included this:</b> ' + f() + '</span>'; $('input', l).addEventListener('change', count); ideas.appendChild(l); });
+    ideas.hidden = false; fb.className = 'fb'; fb.textContent = 'Tick each idea your answer already covers.';
+  });
+}
+
+/* ================= summary ================= */
+function summaryText() {
+  const q = (id, label, unit, sf) => label + ': ' + (QT[id] && QT[id].value != null ? sig(QT[id].value, sf || 3) + (unit ? ' ' + unit : '') : '—') + (solved(id) ? '  ✓' : '  (not checked yet)');
+  const team = ($('#team').value || '').trim();
+  let last = null;
+  Object.keys(sim.log).forEach(k => { if ((sim.log[k].f || 0) > .05) last = Math.max(last == null ? 0 : last, +k); });
+  const lines = [
+    'SCIENCE CLUB PROTOCOL: TEAM SUMMARY', 'Team: ' + (team || '—'), '',
+    'ACTIVITY 1: PREPARE AND DILUTE',
+    q('A1', 'Molar mass of NaHCO3', 'g/mol', 4), q('A2', 'Moles in 5.00 g', 'mol'), q('A3', 'Stock concentration', 'mol/L'),
+    q('B1', 'Dilution factor of the vinegar', 'times'), q('W1', 'Mass to weigh for 25 mL of stock', 'g'), q('W2', 'Relative error at 0.25 g', '%'),
+    'Why use a portion of the stock: ' + (RS.R1.text.trim() || '—'), '',
+    'ACTIVITY 2: LITMUS',
+    lit.done ? 'Predictions matching the reference: ' + lit.right + ' of 9' : 'Litmus test not run yet',
+    'Bench notes: ' + (($('#litNote').value || '').trim() || '—'), '',
+    'ACTIVITY 3: REACTION',
+    'Vinegar label: ' + pctS() + '% acetic acid',
+    q('P1', 'Acetic acid in the vinegar', 'mol/L'), q('P2', 'Acetic acid after dilution', 'mol/L'), q('P3', 'Acid in 10 mL of Solution B', 'mmol'),
+    q('P4', 'Predicted volume of stock', 'mL'),
+    'Rehearsal cup: last bubbling at ' + (last == null ? '—' : last + ' mL'),
+    'Observed volume you entered: ' + (($('#obs').value || '').trim() || '—'), q('C1', 'Percent difference from prediction', '%'), '',
+    'ACTIVITY 4: ANALYZE',
+    'Reasons about litmus judged correctly: ' + (reasonState.score == null ? '—' : reasonState.score + ' of ' + REASONS.length),
+    'Explanation of the reaction: ' + (RS.R2.text.trim() || '—')
+  ];
+  return lines.join('\n');
+}
+let sT;
+const sched = () => { clearTimeout(sT); sT = setTimeout(() => { const s = $('#summary'); if (s) s.value = summaryText(); }, 150); };
+
+/* ================= clock, safety, kit, nav, inputs ================= */
+const clock = { base: 0, start: 0, running: false, timer: null, last: -2 };
+const SEG = [0, 8, 18, 33, 40];
+const MSG = ['Activity 1: prepare and dilute', 'Activity 2: test with litmus', 'Activity 3: acid–base reaction challenge', 'Activity 4: analyze'];
+const elapsed = () => clock.base + (clock.running ? (Date.now() - clock.start) / 1000 : 0);
+function drawClock() {
+  const e = clamp(elapsed(), 0, 2400), m = Math.floor(e / 60), s = Math.floor(e % 60);
+  $('#clk').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  $('#prog').style.width = (e / 2400 * 100) + '%';
+  let idx = -1; for (let i = 0; i < 4; i++) if (e >= SEG[i] && e < SEG[i + 1]) idx = i;
+  $$('.seg').forEach((sg, i) => sg.classList.toggle('now', (clock.running || e > 0) && i === idx));
+  if (idx !== clock.last) { if (clock.running) toast(idx === -1 ? 'Time is up. Finish your summary.' : MSG[idx]); clock.last = idx; }
+  if (e >= 2400 && clock.running) stopClock();
+}
+function stopClock() {
+  if (clock.running) { clock.base = elapsed(); clock.running = false; }
+  clearInterval(clock.timer); $('#clkBtn').textContent = clock.base > 0 ? 'Resume' : 'Start'; drawClock();
+}
+function buildClock() {
+  $('#clkBtn').addEventListener('click', () => {
+    if (clock.running) { stopClock(); return; }
+    if (clock.base >= 2400) return;
+    clock.running = true; clock.start = Date.now(); clock.last = -2; $('#clkBtn').textContent = 'Pause';
+    clock.timer = setInterval(drawClock, 250); drawClock();
+  });
+  $('#clkReset').addEventListener('click', () => { clock.running = false; clearInterval(clock.timer); clock.base = 0; clock.last = -2; $('#clkBtn').textContent = 'Start'; drawClock(); });
+  drawClock();
+}
+function buildSafety() {
+  const cbs = $$('.safe-cb'), b = $('#clkBtn'), chip = $('#safeStatus');
+  const upd = () => {
+    const n = cbs.filter(c => c.checked).length;
+    chip.textContent = n + ' / 4 confirmed'; chip.className = 'chip' + (n === 4 ? ' ok' : '');
+    b.disabled = n < 4; b.title = n < 4 ? 'Tick all four safety boxes to start the clock' : 'Start the 40-minute clock';
+  };
+  cbs.forEach(c => c.addEventListener('change', upd)); upd();
+}
+function buildKit() {
+  const cbs = $$('.kit-cb'), chip = $('#kitStatus');
+  const upd = () => { const n = cbs.filter(c => c.checked).length; chip.textContent = n + ' / 5 collected'; chip.className = 'chip' + (n === 5 ? ' ok' : ''); };
+  cbs.forEach(c => c.addEventListener('change', upd)); upd();
+  $('#kitN').addEventListener('change', () => {
+    ['K1', 'K2'].forEach(id => { const s = $('.q-slot[data-q="' + id + '"]'); if (s && s._reset) s._reset(); });
+  });
+}
+function buildNav() {
+  if (!('IntersectionObserver' in window)) return;
+  const ids = ['act1', 'act2', 'act3', 'act4'], segs = $$('.seg');
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { const i = ids.indexOf(e.target.id); segs.forEach((s, j) => s.classList.toggle('on', j === i)); } });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  ids.forEach(id => { const el = $('#' + id); if (el) io.observe(el); });
+}
+function buildPct() {
+  const inp = $('#pct');
+  inp.addEventListener('change', () => {
+    let v = parseNum(inp.value); if (!isFinite(v)) v = st.pct;
+    v = clamp(v, 2, 9); inp.value = String(Number(v.toFixed(1)));
+    if (Math.abs(v - st.pct) < 1e-9) return;
+    st.pct = v;
+    ['P1', 'P2', 'P3', 'P4', 'C1'].forEach(id => { const s = $('.q-slot[data-q="' + id + '"]'); if (s && s._reset) s._reset(); });
+    $$('#tblT tbody tr').forEach(r => r._reset());
+    $('#chipAcid').textContent = 'acid in cup: answer P3 first'; const tf = $('#tFb'); tf.textContent = ''; tf.className = 'fb';
+    if (simApi) simApi.reset();
+    api.chart && api.chart(); api.refresh(); refreshLocks();
+    toast('Vinegar strength is now ' + pctS() + '%. The Activity 3 numbers were reset.');
+  });
+}
+function buildCopy() {
+  $('#copyBtn').addEventListener('click', async () => {
+    const ta = $('#summary'), fb = $('#copyFb');
+    ta.value = summaryText();
+    try { await navigator.clipboard.writeText(ta.value); fb.textContent = 'Copied.'; }
+    catch (e) { ta.focus(); ta.select(); fb.textContent = 'Text selected. Press Ctrl+C (or ⌘+C) to copy.'; }
+  });
+}
+
+/* ================= start ================= */
+function init() {
+  $$('.q-slot').forEach(buildQ);
+  makeStepper('stepA', stepsA, sceneA($('#svgA')));
+  makeStepper('stepB', stepsB, sceneB($('#svgB')));
+  buildLit(); buildEq(); buildSim(); buildT(); buildChart(); buildReasons();
+  $$('[data-reflect]').forEach(buildReflect);
+  buildSafety(); buildKit(); buildClock(); buildNav(); buildPct(); buildCopy();
+  api.predict();
+  refreshLocks();
+  document.addEventListener('input', sched); document.addEventListener('change', sched); document.addEventListener('click', sched);
+  sched();
+}
+init();
+})();
+</script>
+
+</body></html>
